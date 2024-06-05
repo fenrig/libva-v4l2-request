@@ -166,7 +166,7 @@ VAStatus VA_DRIVER_INIT_FUNC(VADriverContextP context)
 		goto error;
 	}
 
-	if((capabilities & V4L2_CAP_VIDEO_M2M_MPLANE) = V4L2_CAP_VIDEO_M2M_MPLANE) {
+	if((capabilities & V4L2_CAP_VIDEO_M2M_MPLANE) == V4L2_CAP_VIDEO_M2M_MPLANE) {
 		driver_data->output_type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
 	} else if((capabilities & V4L2_CAP_VIDEO_M2M) == V4L2_CAP_VIDEO_M2M) {
 		driver_data->output_type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
