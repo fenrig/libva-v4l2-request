@@ -82,6 +82,7 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 	// (in the first RequestCreateSurfaces2 call BEFORE any buffers are created later on)
 	unsigned int pixelformat = V4L2_PIX_FMT_H264_SLICE;
 	unsigned int output_type = driver_data->output_type;
+	capture_type = driver_data->format.type;
 
 	if (!SET_FORMAT_OF_OUTPUT_ONCE) {
 		rc = v4l2_set_format(driver_data->video_fd, output_type, pixelformat,
@@ -102,13 +103,13 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 
     if (!driver_data->video_format) {
 		found = v4l2_find_format(driver_data->video_fd,
-					 V4L2_BUF_TYPE_VIDEO_CAPTURE,
+					 capture_type,
 					 V4L2_PIX_FMT_SUNXI_TILED_NV12);
 		if (found)
 			video_format = video_format_find(V4L2_PIX_FMT_SUNXI_TILED_NV12);
 
 		found = v4l2_find_format(driver_data->video_fd,
-					 V4L2_BUF_TYPE_VIDEO_CAPTURE,
+					 capture_type,
 					 V4L2_PIX_FMT_NV12);
 		if (found)
 			video_format = video_format_find(V4L2_PIX_FMT_NV12);
@@ -120,7 +121,7 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 
 		driver_data->video_format = video_format;
 
-		capture_type = driver_data->format.type;
+		
 
 		rc = v4l2_set_format(driver_data->video_fd, capture_type,
 				     video_format->v4l2_format, width, height);
