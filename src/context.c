@@ -73,8 +73,8 @@ VAStatus RequestCreateContext(VADriverContextP context, VAConfigID config_id,
 	if (video_format == NULL)
 		return VA_STATUS_ERROR_OPERATION_FAILED;
 
-	output_type = v4l2_type_video_output(video_format->v4l2_mplane);
-	capture_type = v4l2_type_video_capture(video_format->v4l2_mplane);
+	output_type = driver_data->output_type;
+	capture_type = driver_data->format.type;
 
 	config_object = CONFIG(driver_data, config_id);
 	if (config_object == NULL) {
@@ -191,8 +191,8 @@ VAStatus RequestDestroyContext(VADriverContextP context, VAContextID context_id)
 	if (video_format == NULL)
 		return VA_STATUS_ERROR_OPERATION_FAILED;
 
-	output_type = v4l2_type_video_output(video_format->v4l2_mplane);
-	capture_type = v4l2_type_video_capture(video_format->v4l2_mplane);
+	output_type = driver_data->output_type;
+	capture_type = driver_data->format.type;
 
 	context_object = CONTEXT(driver_data, context_id);
 	if (context_object == NULL)

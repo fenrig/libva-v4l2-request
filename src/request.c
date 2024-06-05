@@ -168,8 +168,10 @@ VAStatus VA_DRIVER_INIT_FUNC(VADriverContextP context)
 
 	if((capabilities & V4L2_CAP_VIDEO_M2M_MPLANE) == V4L2_CAP_VIDEO_M2M_MPLANE) {
 		driver_data->output_type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
+		driver_data->format.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
 	} else if((capabilities & V4L2_CAP_VIDEO_M2M) == V4L2_CAP_VIDEO_M2M) {
 		driver_data->output_type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
+		driver_data->format.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
 	} else {
 		request_log("Missing required mem2mem capability: V4L2_CAP_VIDEO_M2M_MPLANE or V4L2_CAP_VIDEO_M2M\n");
 		status = VA_STATUS_ERROR_OPERATION_FAILED;

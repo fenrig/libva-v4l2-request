@@ -54,6 +54,7 @@ struct request_data {
 	int video_fd;
 	int media_fd;
 	enum v4l2_buf_type output_type;
+	struct v4l2_format format;
 	struct video_format *video_format;
 };
 

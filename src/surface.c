@@ -81,7 +81,7 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 	// we declare SET_FORMAT_OF_OUTPUT_ONCE to ensure v4l2_set_format only gets called once
 	// (in the first RequestCreateSurfaces2 call BEFORE any buffers are created later on)
 	unsigned int pixelformat = V4L2_PIX_FMT_H264_SLICE;
-	unsigned int output_type = v4l2_type_video_output(false);
+	unsigned int output_type = driver_data->output_type;
 
 	if (!SET_FORMAT_OF_OUTPUT_ONCE) {
 		rc = v4l2_set_format(driver_data->video_fd, output_type, pixelformat,
@@ -116,7 +116,7 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 
 		driver_data->video_format = video_format;
 
-		capture_type = v4l2_type_video_capture(video_format->v4l2_mplane);
+		capture_type = driver_data->format.type;
 
 		rc = v4l2_set_format(driver_data->video_fd, capture_type,
 				     video_format->v4l2_format, width, height);
@@ -124,7 +124,7 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 			return VA_STATUS_ERROR_OPERATION_FAILED;
         } else {
 		video_format = driver_data->video_format;
-		capture_type = v4l2_type_video_capture(video_format->v4l2_mplane);
+		capture_type = driver_data->format.type;
 	}
 
 	rc = v4l2_get_format(driver_data->video_fd, capture_type, &format_width,
@@ -291,8 +291,8 @@ VAStatus RequestSyncSurface(VADriverContextP context, VASurfaceID surface_id)
 		goto error;
 	}
 
-	output_type = v4l2_type_video_output(video_format->v4l2_mplane);
-	capture_type = v4l2_type_video_capture(video_format->v4l2_mplane);
+	output_type = driver_data->output_type;
+	capture_type = driver_data->format.type;
 
 	surface_object = SURFACE(driver_data, surface_id);
 	if (surface_object == NULL) {
@@ -509,7 +509,7 @@ VAStatus RequestExportSurfaceHandle(VADriverContextP context,
 	export_fds_count = surface_object->destination_buffers_count;
 	export_fds = malloc(export_fds_count * sizeof(*export_fds));
 
-	capture_type = v4l2_type_video_capture(video_format->v4l2_mplane);
+	capture_type = driver_data->format.type;
 
 	rc = v4l2_export_buffer(driver_data->video_fd, capture_type,
 				surface_object->destination_index, O_RDONLY,
