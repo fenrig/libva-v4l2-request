@@ -95,10 +95,12 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 
 	/////////// ENDHACK
 
-	if (format != VA_RT_FORMAT_YUV420)
+	if (format != VA_RT_FORMAT_YUV420){
+		request_log("Format not VA_RT_FORMAT_YUV420\n");
 		return VA_STATUS_ERROR_UNSUPPORTED_RT_FORMAT;
+	}
 
-        if (!driver_data->video_format) {
+    if (!driver_data->video_format) {
 		found = v4l2_find_format(driver_data->video_fd,
 					 V4L2_BUF_TYPE_VIDEO_CAPTURE,
 					 V4L2_PIX_FMT_SUNXI_TILED_NV12);
@@ -111,8 +113,10 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 		if (found)
 			video_format = video_format_find(V4L2_PIX_FMT_NV12);
 
-		if (video_format == NULL)
+		if (video_format == NULL) {
+			request_log("video_format failed");
 			return VA_STATUS_ERROR_OPERATION_FAILED;
+		}
 
 		driver_data->video_format = video_format;
 
@@ -120,9 +124,11 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 
 		rc = v4l2_set_format(driver_data->video_fd, capture_type,
 				     video_format->v4l2_format, width, height);
-		if (rc < 0)
+		if (rc < 0){
+			request_log("v4l2_set_format failed: (%d) %s\n", rc, strerror(rc));
 			return VA_STATUS_ERROR_OPERATION_FAILED;
-        } else {
+		}
+    } else {
 		video_format = driver_data->video_format;
 		capture_type = driver_data->format.type;
 	}
@@ -130,31 +136,39 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 	rc = v4l2_get_format(driver_data->video_fd, capture_type, &format_width,
 			     &format_height, destination_bytesperlines,
 			     destination_sizes, NULL);
-	if (rc < 0)
+	if (rc < 0) {
+		request_log("v4l2_get_format failed: (%d) %s\n", rc, strerror(rc));
 		return VA_STATUS_ERROR_OPERATION_FAILED;
+	}
 
 	destination_planes_count = video_format->planes_count;
 
 	rc = v4l2_create_buffers(driver_data->video_fd, capture_type,
 				 surfaces_count, &index_base);
-	if (rc < 0)
+	if (rc < 0) {
+		request_log("v4l2_create_buffers failed: (%d) %s\n", rc, strerror(rc));
 		return VA_STATUS_ERROR_ALLOCATION_FAILED;
+	}
 
 	for (i = 0; i < surfaces_count; i++) {
 		index = index_base + i;
 
 		id = object_heap_allocate(&driver_data->surface_heap);
 		surface_object = SURFACE(driver_data, id);
-		if (surface_object == NULL)
+		if (surface_object == NULL) {
+			request_log("SURFACE failed");
 			return VA_STATUS_ERROR_ALLOCATION_FAILED;
+		}
 
 		rc = v4l2_query_buffer(driver_data->video_fd, capture_type,
 				       index,
 				       surface_object->destination_map_lengths,
 				       surface_object->destination_map_offsets,
 				       video_format->v4l2_buffers_count);
-		if (rc < 0)
+		if (rc < 0) {
+			request_log("v4l2_query_buffer failed: (%d) %s\n", rc, strerror(rc));
 			return VA_STATUS_ERROR_ALLOCATION_FAILED;
+		}
 
 		for (j = 0; j < video_format->v4l2_buffers_count; j++) {
 			surface_object->destination_map[j] =
@@ -164,8 +178,10 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 				     driver_data->video_fd,
 				     surface_object->destination_map_offsets[j]);
 
-			if (surface_object->destination_map[j] == MAP_FAILED)
+			if (surface_object->destination_map[j] == MAP_FAILED) {
+				request_log("mmap failed");
 				return VA_STATUS_ERROR_ALLOCATION_FAILED;
+			}
 		}
 
 		/*
@@ -203,6 +219,7 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 					destination_bytesperlines[j];
 			}
 		} else {
+			request_log("planes failed");
 			return VA_STATUS_ERROR_ALLOCATION_FAILED;
 		}
 
@@ -231,6 +248,7 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 		surfaces_ids[i] = id;
 	}
 
+	request_log("Surface success");
 	return VA_STATUS_SUCCESS;
 }
 
