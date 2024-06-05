@@ -36,6 +36,7 @@
 
 #include "request.h"
 #include "surface.h"
+#include "utils.h"
 #include "v4l2.h"
 
 enum h264_slice_type {
