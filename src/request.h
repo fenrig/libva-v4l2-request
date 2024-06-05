@@ -53,7 +53,7 @@ struct request_data {
 	struct object_heap image_heap;
 	int video_fd;
 	int media_fd;
-
+	enum v4l2_buf_type output_type;
 	struct video_format *video_format;
 };
 

@@ -63,7 +63,6 @@ VAStatus VA_DRIVER_INIT_FUNC(VADriverContextP context)
 	struct VADriverVTable *vtable = context->vtable;
 	VAStatus status;
 	unsigned int capabilities;
-	unsigned int capabilities_required;
 	int video_fd = -1;
 	int media_fd = -1;
 	char *video_path;
@@ -85,7 +84,6 @@ VAStatus VA_DRIVER_INIT_FUNC(VADriverContextP context)
 	vtable->vaTerminate = RequestTerminate;
 	vtable->vaQueryConfigEntrypoints = RequestQueryConfigEntrypoints;
 	vtable->vaQueryConfigProfiles = RequestQueryConfigProfiles;
-	vtable->vaQueryConfigEntrypoints = RequestQueryConfigEntrypoints;
 	vtable->vaQueryConfigAttributes = RequestQueryConfigAttributes;
 	vtable->vaCreateConfig = RequestCreateConfig;
 	vtable->vaDestroyConfig = RequestDestroyConfig;
@@ -162,10 +160,18 @@ VAStatus VA_DRIVER_INIT_FUNC(VADriverContextP context)
 		goto error;
 	}
 
-	capabilities_required = V4L2_CAP_STREAMING;
+	if ((capabilities & V4L2_CAP_STREAMING) != V4L2_CAP_STREAMING) {
+		request_log("Missing required driver capabilities: V4L2_CAP_STREAMING\n");
+		status = VA_STATUS_ERROR_OPERATION_FAILED;
+		goto error;
+	}
 
-	if ((capabilities & capabilities_required) != capabilities_required) {
-		request_log("Missing required driver capabilities\n");
+	if((capabilities & V4L2_CAP_VIDEO_M2M_MPLANE) = V4L2_CAP_VIDEO_M2M_MPLANE) {
+		driver_data->output_type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
+	} else if((capabilities & V4L2_CAP_VIDEO_M2M) == V4L2_CAP_VIDEO_M2M) {
+		driver_data->output_type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
+	} else {
+		request_log("Missing required mem2mem capability: V4L2_CAP_VIDEO_M2M_MPLANE or V4L2_CAP_VIDEO_M2M\n");
 		status = VA_STATUS_ERROR_OPERATION_FAILED;
 		goto error;
 	}
@@ -175,8 +181,10 @@ VAStatus VA_DRIVER_INIT_FUNC(VADriverContextP context)
 		media_path = "/dev/media0";
 
 	media_fd = open(media_path, O_RDWR | O_NONBLOCK);
-	if (media_fd < 0)
-		return VA_STATUS_ERROR_OPERATION_FAILED;
+	if (media_fd < 0) {
+		status = VA_STATUS_ERROR_OPERATION_FAILED;
+		goto error;
+	}
 
 	driver_data->video_fd = video_fd;
 	driver_data->media_fd = media_fd;
@@ -185,8 +193,6 @@ VAStatus VA_DRIVER_INIT_FUNC(VADriverContextP context)
 	goto complete;
 
 error:
-	status = VA_STATUS_ERROR_OPERATION_FAILED;
-
 	if (video_fd >= 0)
 		close(video_fd);
 
