@@ -437,7 +437,7 @@ static int v4l2_ioctl_controls(int video_fd, int request_fd, unsigned long ioc,
     	.which = (request_fd >= 0) ? V4L2_CTRL_WHICH_REQUEST_VAL : 0,
     };
 
-	if (!control_arrau || !num_controls) {
+	if (!control_array || !num_controls) {
 		request_log("No control or count given, return 0");
     	return 0;
 	}
