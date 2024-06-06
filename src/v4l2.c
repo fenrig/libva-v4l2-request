@@ -316,7 +316,7 @@ int v4l2_request_buffers(int video_fd, unsigned int type,
 		.type = type,
 		.memory = V4L2_MEMORY_MMAP,
 		.count = buffers_count,
-	}
+	};
 
 	rc = ioctl(video_fd, VIDIOC_REQBUFS, &buffers);
 	if (rc < 0) {
@@ -432,12 +432,12 @@ static int v4l2_ioctl_controls(int video_fd, int request_fd, unsigned long ioc,
 {
 	struct v4l2_ext_controls controls = {
     	.controls = control_array,
-    	.count = count,
+    	.count = num_controls,
     	.request_fd = request_fd,
     	.which = (request_fd >= 0) ? V4L2_CTRL_WHICH_REQUEST_VAL : 0,
     };
 
-	if (!control || !count) {
+	if (!control_arrau || !num_controls) {
 		request_log("No control or count given, return 0");
     	return 0;
 	}
