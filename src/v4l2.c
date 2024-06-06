@@ -277,13 +277,13 @@ int v4l2_query_buffer(int video_fd, unsigned int type, unsigned int index,
 	unsigned int i;
 	int rc;
 
-	struct v4l2_buffer buffer {
+	struct v4l2_buffer buffer = {
 		.type = type,
 		.memory = V4L2_MEMORY_MMAP,
 		.index = index,
 		.length = buffers_count,
 		.m.planes = planes,
-	}
+	};
 
 	memset(planes, 0, (buffers_count * sizeof(struct v4l2_plane)));
 
