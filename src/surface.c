@@ -126,7 +126,7 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 		rc = v4l2_set_format(driver_data->video_fd, capture_type,
 				     video_format->v4l2_format, width, height);
 		if (rc < 0){
-			request_log("v4l2_set_format failed: (%d) %s\n", rc, strerror(rc));
+			request_log("v4l2_set_format failed: (%d) %s\n", errno, strerror(errno));
 			return VA_STATUS_ERROR_OPERATION_FAILED;
 		}
     } else {
@@ -138,7 +138,7 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 			     &format_height, destination_bytesperlines,
 			     destination_sizes, NULL);
 	if (rc < 0) {
-		request_log("v4l2_get_format failed: (%d) %s\n", rc, strerror(rc));
+		request_log("v4l2_get_format failed: (%d) %s\n", errno, strerror(errno));
 		return VA_STATUS_ERROR_OPERATION_FAILED;
 	}
 
@@ -147,7 +147,7 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 	rc = v4l2_create_buffers(driver_data->video_fd, capture_type,
 				 surfaces_count, &index_base);
 	if (rc < 0) {
-		request_log("v4l2_create_buffers failed: (%d) %s\n", rc, strerror(rc));
+		request_log("v4l2_create_buffers failed: (%d) %s\n", errno, strerror(errno));
 		return VA_STATUS_ERROR_ALLOCATION_FAILED;
 	}
 
@@ -167,7 +167,7 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 				       surface_object->destination_map_offsets,
 				       video_format->v4l2_buffers_count);
 		if (rc < 0) {
-			request_log("v4l2_query_buffer failed: (%d) %s\n", rc, strerror(rc));
+			request_log("v4l2_query_buffer failed: (%d) %s\n", errno, strerror(errno));
 			return VA_STATUS_ERROR_ALLOCATION_FAILED;
 		}
 

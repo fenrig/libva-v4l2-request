@@ -238,13 +238,12 @@ int v4l2_get_format(int video_fd, unsigned int type, unsigned int *width,
 int v4l2_create_buffers(int video_fd, unsigned int type,
 			unsigned int buffers_count, unsigned int *index_base)
 {
-	struct v4l2_create_buffers buffers;
 	int rc;
-
-	memset(&buffers, 0, sizeof(buffers));
-	buffers.format.type = type;
-	buffers.memory = V4L2_MEMORY_MMAP;
-	buffers.count = buffers_count;
+	struct v4l2_create_buffers buffers = {
+		.count = buffers_count,
+		.memory = V4L2_MEMORY_MMAP,
+		.format.type = type,
+	};
 
 	rc = ioctl(video_fd, VIDIOC_G_FMT, &buffers.format);
 	if (rc < 0) {
@@ -286,7 +285,7 @@ int v4l2_query_buffer(int video_fd, unsigned int type, unsigned int index,
 
 	rc = ioctl(video_fd, VIDIOC_QUERYBUF, &buffer);
 	if (rc < 0) {
-		request_log("Unable to query buffer: %s\n", strerror(errno));
+		request_log("Unable to query buffer: (%d) %s\n", errno, strerror(errno));
 		return -1;
 	}
 
@@ -312,13 +311,12 @@ int v4l2_query_buffer(int video_fd, unsigned int type, unsigned int index,
 int v4l2_request_buffers(int video_fd, unsigned int type,
 			 unsigned int buffers_count)
 {
-	struct v4l2_requestbuffers buffers;
 	int rc;
-
-	memset(&buffers, 0, sizeof(buffers));
-	buffers.type = type;
-	buffers.memory = V4L2_MEMORY_MMAP;
-	buffers.count = buffers_count;
+	struct v4l2_requestbuffers buffers = {
+		.type = type,
+		.memory = V4L2_MEMORY_MMAP,
+		.count = buffers_count,
+	}
 
 	rc = ioctl(video_fd, VIDIOC_REQBUFS, &buffers);
 	if (rc < 0) {
@@ -432,16 +430,16 @@ static int v4l2_ioctl_controls(int video_fd, int request_fd, unsigned long ioc,
 			       struct v4l2_ext_control *control_array,
 			       unsigned int num_controls)
 {
-	struct v4l2_ext_controls controls;
+	struct v4l2_ext_controls controls = {
+    	.controls = control_array,
+    	.count = count,
+    	.request_fd = request_fd,
+    	.which = (request_fd >= 0) ? V4L2_CTRL_WHICH_REQUEST_VAL : 0,
+    };
 
-	memset(&controls, 0, sizeof(controls));
-
-	controls.controls = control_array;
-	controls.count = num_controls;
-
-	if (request_fd >= 0) {
-		controls.which = V4L2_CTRL_WHICH_REQUEST_VAL;
-		controls.request_fd = request_fd;
+	if (!control || !count) {
+		request_log("No control or count given, return 0");
+    	return 0;
 	}
 
 	return ioctl(video_fd, ioc, &controls);
