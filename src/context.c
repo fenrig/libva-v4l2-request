@@ -56,25 +56,23 @@ VAStatus RequestCreateContext(VADriverContextP context, VAConfigID config_id,
 	struct object_config *config_object;
 	struct object_surface *surface_object;
 	struct object_context *context_object = NULL;
-	struct video_format *video_format;
+	struct video_format *video_format = driver_data->video_format;
 	unsigned int length;
 	unsigned int offset;
 	void *source_data = MAP_FAILED;
 	VASurfaceID *ids = NULL;
 	VAContextID id;
 	VAStatus status;
-	unsigned int output_type, capture_type;
+	unsigned int output_type = driver_data->output_type;
+	unsigned int capture_type = driver_data->format.type;
+
 	unsigned int index_base;
 	unsigned int index;
 	unsigned int i;
 	int rc;
 
-	video_format = driver_data->video_format;
 	if (video_format == NULL)
 		return VA_STATUS_ERROR_OPERATION_FAILED;
-
-	output_type = driver_data->output_type;
-	capture_type = driver_data->format.type;
 
 	config_object = CONFIG(driver_data, config_id);
 	if (config_object == NULL) {
@@ -184,17 +182,14 @@ VAStatus RequestDestroyContext(VADriverContextP context, VAContextID context_id)
 {
 	struct request_data *driver_data = context->pDriverData;
 	struct object_context *context_object;
-	struct video_format *video_format;
-	unsigned int output_type, capture_type;
+	struct video_format *video_format = driver_data->video_format;
+	unsigned int output_type = driver_data->output_type;
+	unsigned int capture_type = driver_data->format.type;
 	VAStatus status;
 	int rc;
 
-	video_format = driver_data->video_format;
 	if (video_format == NULL)
 		return VA_STATUS_ERROR_OPERATION_FAILED;
-
-	output_type = driver_data->output_type;
-	capture_type = driver_data->format.type;
 
 	context_object = CONTEXT(driver_data, context_id);
 	if (context_object == NULL)
