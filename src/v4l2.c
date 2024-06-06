@@ -270,18 +270,18 @@ int v4l2_query_buffer(int video_fd, unsigned int type, unsigned int index,
 		      unsigned int buffers_count)
 {
 	struct v4l2_plane planes[buffers_count];
-	struct v4l2_buffer buffer;
 	unsigned int i;
 	int rc;
 
-	memset(planes, 0, sizeof(planes));
-	memset(&buffer, 0, sizeof(buffer));
+	struct v4l2_buffer buffer {
+		.type = type,
+		.memory = V4L2_MEMORY_MMAP,
+		.index = index,
+		.length = buffers_count,
+		.m.planes = planes,
+	}
 
-	buffer.type = type;
-	buffer.memory = V4L2_MEMORY_MMAP;
-	buffer.index = index;
-	buffer.length = buffers_count;
-	buffer.m.planes = planes;
+	memset(planes, 0, sizeof(planes));
 
 	rc = ioctl(video_fd, VIDIOC_QUERYBUF, &buffer);
 	if (rc < 0) {

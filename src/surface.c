@@ -167,7 +167,7 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 				       surface_object->destination_map_offsets,
 				       video_format->v4l2_buffers_count);
 		if (rc < 0) {
-			request_log("v4l2_query_buffer failed: (%d) %s\n", errno, strerror(errno));
+			request_log("v4l2_query_buffer failed in surface");
 			return VA_STATUS_ERROR_ALLOCATION_FAILED;
 		}
 
