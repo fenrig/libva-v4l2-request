@@ -259,6 +259,10 @@ int v4l2_create_buffers(int video_fd, unsigned int type,
 		return -1;
 	}
 
+	if(buffers.count != buffers_count) {
+		request_log("Created less buffers (%u) then requested (%u)", buffers.count, buffers_count);
+	}
+
 	if (index_base != NULL)
 		*index_base = buffers.index;
 
@@ -281,7 +285,7 @@ int v4l2_query_buffer(int video_fd, unsigned int type, unsigned int index,
 		.m.planes = planes,
 	}
 
-	memset(planes, 0, sizeof(planes));
+	memset(planes, 0, (buffers_count * sizeof(struct v4l2_plane)));
 
 	rc = ioctl(video_fd, VIDIOC_QUERYBUF, &buffer);
 	if (rc < 0) {
