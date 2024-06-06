@@ -236,11 +236,11 @@ int v4l2_get_format(int video_fd, unsigned int type, unsigned int *width,
 }
 
 int v4l2_create_buffers(int video_fd, unsigned int type,
-			unsigned int buffers_count, unsigned int *index_base)
+			unsigned int *buffers_count, unsigned int *index_base)
 {
 	int rc;
 	struct v4l2_create_buffers buffers = {
-		.count = buffers_count,
+		.count = *buffers_count,
 		.memory = V4L2_MEMORY_MMAP,
 		.format.type = type,
 	};
@@ -259,8 +259,9 @@ int v4l2_create_buffers(int video_fd, unsigned int type,
 		return -1;
 	}
 
-	if(buffers.count != buffers_count) {
+	if(buffers.count != *buffers_count) {
 		request_log("Created less buffers (%u) then requested (%u)\n", buffers.count, buffers_count);
+		*buffers_count = buffers.count;
 	}
 
 	if (index_base != NULL)

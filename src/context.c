@@ -91,7 +91,7 @@ VAStatus RequestCreateContext(VADriverContextP context, VAConfigID config_id,
 	memset(&context_object->dpb, 0, sizeof(context_object->dpb));
 
 	rc = v4l2_create_buffers(driver_data->video_fd, output_type,
-				 surfaces_count, &index_base);
+				&surfaces_count, &index_base);
 	if (rc < 0) {
 		status = VA_STATUS_ERROR_ALLOCATION_FAILED;
 		goto error;
