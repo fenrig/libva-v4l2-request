@@ -122,7 +122,6 @@ VAStatus RequestCreateContext(VADriverContextP context, VAConfigID config_id,
 		rc = v4l2_query_buffer(driver_data->video_fd, output_type,
 				       index, &length, &offset, 1);
 		if (rc < 0) {
-			request_log("v4l2_query_buffer failed: %d (%s)", errno, strerror(errno));
 			status = VA_STATUS_ERROR_ALLOCATION_FAILED;
 			goto error;
 		}
