@@ -260,7 +260,7 @@ int v4l2_create_buffers(int video_fd, unsigned int type,
 	}
 
 	if(buffers.count != buffers_count) {
-		request_log("Created less buffers (%u) then requested (%u)", buffers.count, buffers_count);
+		request_log("Created less buffers (%u) then requested (%u)\n", buffers.count, buffers_count);
 	}
 
 	if (index_base != NULL)

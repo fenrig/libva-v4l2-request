@@ -157,7 +157,7 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 		id = object_heap_allocate(&driver_data->surface_heap);
 		surface_object = SURFACE(driver_data, id);
 		if (surface_object == NULL) {
-			request_log("SURFACE failed");
+			request_log("SURFACE failed\n");
 			return VA_STATUS_ERROR_ALLOCATION_FAILED;
 		}
 
@@ -167,7 +167,7 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 				       surface_object->destination_map_offsets,
 				       video_format->v4l2_buffers_count);
 		if (rc < 0) {
-			request_log("v4l2_query_buffer failed in surface");
+			request_log("v4l2_query_buffer failed in surface\n");
 			return VA_STATUS_ERROR_ALLOCATION_FAILED;
 		}
 
@@ -249,7 +249,6 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 		surfaces_ids[i] = id;
 	}
 
-	request_log("Surface success");
 	return VA_STATUS_SUCCESS;
 }
 
