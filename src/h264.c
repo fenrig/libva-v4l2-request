@@ -476,7 +476,7 @@ int h264_get_controls(struct request_data *driver_data,
 		return VA_STATUS_ERROR_OPERATION_FAILED;
 	}
 
-	if(v4l2_set_controls(driver_data->video_fd, -1, &controls, 2) < 0) {
+	if(v4l2_set_controls(driver_data->video_fd, -1, controls, 2) < 0) {
 		request_log("Couldn not set controls\n");
 		return VA_STATUS_ERROR_OPERATION_FAILED;
 	}
