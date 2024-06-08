@@ -514,7 +514,7 @@ int v4l2_set_stream(int video_fd, unsigned int type, bool enable)
 	return 0;
 }
 
-static void v4l2_enumerate_menu(_u32 id, _u32 min_index, _u32 max_index) {
+static void v4l2_enumerate_menu(__u32 id, __u32 min_index, __u32 max_index) {
 	request_log(" - Menu Items:\n");
 
 	struct v4l2_querymenu querymenu;
