@@ -178,6 +178,10 @@ VAStatus VA_DRIVER_INIT_FUNC(VADriverContextP context)
 		goto error;
 	}
 
+	request_log("Querying controls:\n\n");
+	v4l2_query_control(video_fd);
+	request_log("---------\n\n");
+
 	media_path = getenv("LIBVA_V4L2_REQUEST_MEDIA_PATH");
 	if (media_path == NULL)
 		media_path = "/dev/media0";

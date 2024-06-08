@@ -63,5 +63,6 @@ int v4l2_set_controls(int video_fd, int request_fd,
 int v4l2_set_control(int video_fd, int request_fd, unsigned int id, void *data,
 		     unsigned int size);
 int v4l2_set_stream(int video_fd, unsigned int type, bool enable);
+int v4l2_query_control(int video_fd);
 
 #endif

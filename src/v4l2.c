@@ -511,3 +511,35 @@ int v4l2_set_stream(int video_fd, unsigned int type, bool enable)
 
 	return 0;
 }
+
+static void v4l2_enumerate_menu(_u32 id, _u32 min_index, _u32 max_index) {
+	request_log(" - Menu Items:\n");
+
+	struct v4l2_querymenu querymenu;
+	memset(&querymenu, 0, sizeof(querymenu));
+	querymenu.id = id;
+
+	for (querymenu.index = min_index; querymenu.index <= max_index; querymenu.index++) {
+		if (0 == ioctl(fd, VIDIOC_QUERYMENU, &querymenu)) {
+			request_log("   * %s\\n", querymenu.name);
+		}
+	}
+}
+
+int v4l2_query_control(int video_fd) {
+	struct v4l2_query_ext_ctrl query_ext_ctrl;
+
+	memset(&query_ext_ctrl, 0, sizeof(query_ext_ctrl));
+
+	query_ext_ctrl.id = V4L2_CTRL_FLAG_NEXT_CTRL | V4L2_CTRL_FLAG_NEXT_COMPOUND;
+	while (0 == ioctl(video_fd, VIDIOC_QUERY_EXT_CTRL, &query_ext_ctrl)) {
+		if (!(query_ext_ctrl.flags & V4L2_CTRL_FLAG_DISABLED)) {
+			request_log("Control: %s\n", query_ext_ctrl.name);
+		if (query_ext_ctrl.type == V4L2_CTRL_TYPE_MENU)
+			enumerate_menu(query_ext_ctrl.id, query_ext_ctrl.minimum, query_ext_ctrl.maximum);
+		}
+		query_ext_ctrl.id |= V4L2_CTRL_FLAG_NEXT_CTRL | V4L2_CTRL_FLAG_NEXT_COMPOUND;
+	}
+
+	return 0;
+}
