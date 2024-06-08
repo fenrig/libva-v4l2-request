@@ -48,9 +48,6 @@ struct object_context {
 	int picture_height;
 	int flags;
 
-	int decode_mode;
-	int start_code;
-
 	/* H264 only */
 	struct h264_dpb dpb;
 	bool h264_start_code;

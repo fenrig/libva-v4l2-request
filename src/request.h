@@ -56,6 +56,8 @@ struct request_data {
 	enum v4l2_buf_type output_type;
 	struct v4l2_format format;
 	struct video_format *video_format;
+	int decode_mode;
+	int start_code;
 };
 
 VAStatus VA_DRIVER_INIT_FUNC(VADriverContextP context);
