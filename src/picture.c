@@ -56,7 +56,7 @@ static VAStatus codec_store_buffer(struct request_data *driver_data,
 				   struct object_surface *surface_object,
 				   struct object_buffer *buffer_object)
 {
-	request_log("fenrig: %s", __func__);
+	request_log("fenrig: %s\n", __func__);
 	switch (buffer_object->type) {
 	case VASliceDataBufferType:
 		/*
@@ -181,7 +181,7 @@ static VAStatus codec_set_controls(struct request_data *driver_data,
 {
 	int rc;
 
-	request_log("fenrig: %s", __func__);
+	request_log("fenrig: %s\n", __func__);
 
 	switch (profile) {
 	case VAProfileMPEG2Simple:
@@ -226,7 +226,7 @@ VAStatus RequestBeginPicture(VADriverContextP context, VAContextID context_id,
 	struct object_context *context_object;
 	struct object_surface *surface_object;
 
-	request_log("fenrig: %s", __func__);
+	request_log("fenrig: %s\n", __func__);
 
 	context_object = CONTEXT(driver_data, context_id);
 	if (context_object == NULL)
@@ -256,7 +256,7 @@ VAStatus RequestRenderPicture(VADriverContextP context, VAContextID context_id,
 	int rc;
 	int i;
 
-	request_log("fenrig: %s", __func__);
+	request_log("fenrig: %s\n", __func__);
 
 	context_object = CONTEXT(driver_data, context_id);
 	if (context_object == NULL)
@@ -298,7 +298,7 @@ VAStatus RequestEndPicture(VADriverContextP context, VAContextID context_id)
 	VAStatus status;
 	int rc;
 
-	request_log("fenrig: %s", __func__);
+	request_log("fenrig: %s\n", __func__);
 
 	video_format = driver_data->video_format;
 	if (video_format == NULL)

@@ -56,7 +56,7 @@ VAStatus RequestCreateImage(VADriverContextP context, VAImageFormat *format,
 	unsigned int i;
 	int rc;
 
-	request_log("fenrig: %s", __func__);
+	request_log("fenrig: %s\n", __func__);
 
 	video_format = driver_data->video_format;
 	if (video_format == NULL)
@@ -131,7 +131,7 @@ VAStatus RequestDestroyImage(VADriverContextP context, VAImageID image_id)
 	struct object_image *image_object;
 	VAStatus status;
 
-	request_log("fenrig: %s", __func__);
+	request_log("fenrig: %s\n", __func__);
 
 	image_object = IMAGE(driver_data, image_id);
 	if (image_object == NULL)
@@ -154,7 +154,7 @@ static VAStatus copy_surface_to_image (struct request_data *driver_data,
 	struct object_buffer *buffer_object;
 	unsigned int i;
 
-	request_log("fenrig: %s", __func__);
+	request_log("fenrig: %s\n", __func__);
 
 	buffer_object = BUFFER(driver_data, image->buf);
 	if (buffer_object == NULL)
@@ -190,7 +190,7 @@ VAStatus RequestDeriveImage(VADriverContextP context, VASurfaceID surface_id,
 	VAImageFormat format;
 	VAStatus status;
 
-	request_log("fenrig: %s", __func__);
+	request_log("fenrig: %s\n", __func__);
 
 	surface_object = SURFACE(driver_data, surface_id);
 	if (surface_object == NULL)
@@ -227,7 +227,7 @@ VAStatus RequestQueryImageFormats(VADriverContextP context,
 	formats[0].fourcc = VA_FOURCC_NV12;
 	*formats_count = 1;
 
-	request_log("fenrig: %s", __func__);
+	request_log("fenrig: %s\n", __func__);
 
 	return VA_STATUS_SUCCESS;
 }
@@ -247,7 +247,7 @@ VAStatus RequestGetImage(VADriverContextP context, VASurfaceID surface_id,
 	struct object_image *image_object;
 	VAImage *image;
 
-	request_log("fenrig: %s", __func__);
+	request_log("fenrig: %s\n", __func__);
 	
 
 	surface_object = SURFACE(driver_data, surface_id);

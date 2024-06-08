@@ -52,7 +52,7 @@ VAStatus RequestCreateConfig(VADriverContextP context, VAProfile profile,
 	VAConfigID id;
 	int i, index;
 
-	request_log("fenrig: %s", __func__);
+	request_log("fenrig: %s\n", __func__);
 
 	switch (profile) {
 	case VAProfileH264Main:
@@ -99,7 +99,7 @@ VAStatus RequestDestroyConfig(VADriverContextP context, VAConfigID config_id)
 	struct request_data *driver_data = context->pDriverData;
 	struct object_config *config_object;
 
-	request_log("fenrig: %s", __func__);
+	request_log("fenrig: %s\n", __func__);
 
 	config_object = CONFIG(driver_data, config_id);
 	if (config_object == NULL)
@@ -118,7 +118,7 @@ VAStatus RequestQueryConfigProfiles(VADriverContextP context,
 	unsigned int index = 0;
 	bool found;
 
-	request_log("fenrig: %s", __func__);
+	request_log("fenrig: %s\n", __func__);
 
 	found = v4l2_find_format(driver_data->video_fd,
 				 driver_data->output_type,
@@ -155,7 +155,7 @@ VAStatus RequestQueryConfigEntrypoints(VADriverContextP context,
 				       VAEntrypoint *entrypoints,
 				       int *entrypoints_count)
 {
-	request_log("fenrig: %s", __func__);
+	request_log("fenrig: %s\n", __func__);
 	
 	switch (profile) {
 	case VAProfileH264Main:
@@ -187,7 +187,7 @@ VAStatus RequestQueryConfigAttributes(VADriverContextP context,
 	struct object_config *config_object;
 	int i;
 
-	request_log("fenrig: %s", __func__);
+	request_log("fenrig: %s\n", __func__);
 
 	config_object = CONFIG(driver_data, config_id);
 	if (config_object == NULL)
@@ -217,7 +217,7 @@ VAStatus RequestGetConfigAttributes(VADriverContextP context, VAProfile profile,
 {
 	unsigned int i;
 
-	request_log("fenrig: %s", __func__);
+	request_log("fenrig: %s\n", __func__);
 
 	for (i = 0; i < attributes_count; i++) {
 		switch (attributes[i].type) {

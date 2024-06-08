@@ -71,7 +71,7 @@ VAStatus RequestCreateContext(VADriverContextP context, VAConfigID config_id,
 	unsigned int i;
 	int rc;
 
-	request_log("fenrig: %s", __func__);
+	request_log("fenrig: %s\n", __func__);
 
 	if (video_format == NULL)
 		return VA_STATUS_ERROR_OPERATION_FAILED;
@@ -190,7 +190,7 @@ VAStatus RequestDestroyContext(VADriverContextP context, VAContextID context_id)
 	VAStatus status;
 	int rc;
 
-	request_log("fenrig: %s", __func__);
+	request_log("fenrig: %s\n", __func__);
 
 	if (video_format == NULL)
 		return VA_STATUS_ERROR_OPERATION_FAILED;
