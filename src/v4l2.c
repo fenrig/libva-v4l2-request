@@ -514,7 +514,7 @@ int v4l2_set_stream(int video_fd, unsigned int type, bool enable)
 	return 0;
 }
 
-static void v4l2_enumerate_menu(__u32 id, __u32 min_index, __u32 max_index) {
+static void v4l2_enumerate_menu(int video_fd, __u32 id, __u32 min_index, __u32 max_index) {
 	request_log(" - Menu Items:\n");
 
 	struct v4l2_querymenu querymenu;
@@ -522,7 +522,7 @@ static void v4l2_enumerate_menu(__u32 id, __u32 min_index, __u32 max_index) {
 	querymenu.id = id;
 
 	for (querymenu.index = min_index; querymenu.index <= max_index; querymenu.index++) {
-		if (0 == ioctl(fd, VIDIOC_QUERYMENU, &querymenu)) {
+		if (0 == ioctl(video_fd, VIDIOC_QUERYMENU, &querymenu)) {
 			request_log("   * %s\\n", querymenu.name);
 		}
 	}
@@ -538,7 +538,7 @@ int v4l2_query_control(int video_fd) {
 		if (!(query_ext_ctrl.flags & V4L2_CTRL_FLAG_DISABLED)) {
 			request_log("Control: %s\n", query_ext_ctrl.name);
 		if (query_ext_ctrl.type == V4L2_CTRL_TYPE_MENU)
-			enumerate_menu(query_ext_ctrl.id, query_ext_ctrl.minimum, query_ext_ctrl.maximum);
+			enumerate_menu(video_fd, query_ext_ctrl.id, query_ext_ctrl.minimum, query_ext_ctrl.maximum);
 		}
 		query_ext_ctrl.id |= V4L2_CTRL_FLAG_NEXT_CTRL | V4L2_CTRL_FLAG_NEXT_COMPOUND;
 	}
