@@ -167,7 +167,7 @@ VAStatus RequestCreateContext(VADriverContextP context, VAConfigID config_id,
 		case VAProfileH264Main:
 		case VAProfileH264High:
 		case VAProfileH264ConstrainedBaseline:
-			rc = h264_get_controls(driver_data);
+			rc = h264_get_controls(driver_data, context_object);
 			if (rc < 0) {
 				status = VA_STATUS_ERROR_ALLOCATION_FAILED;
 				goto error;
