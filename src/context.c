@@ -44,6 +44,7 @@
 
 #include "utils.h"
 #include "v4l2.h"
+#include "h264.h"
 
 #include "autoconfig.h"
 
@@ -161,6 +162,22 @@ VAStatus RequestCreateContext(VADriverContextP context, VAConfigID config_id,
 	context_object->flags = flags;
 
 	*context_id = id;
+
+	switch(config_object->profile) {
+		case VAProfileH264Main:
+		case VAProfileH264High:
+		case VAProfileH264ConstrainedBaseline:
+			rc = h264_get_controls(driver_data);
+			if (rc < 0) {
+				status = VA_STATUS_ERROR_ALLOCATION_FAILED;
+				goto error;
+			}
+			break;
+		default:
+			request_log("Cannot init profile");
+			status = VA_STATUS_ERROR_ALLOCATION_FAILED;
+			goto error;
+	}
 
 	status = VA_STATUS_SUCCESS;
 	goto complete;
