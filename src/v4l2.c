@@ -29,6 +29,8 @@
 
 #include <linux/videodev2.h>
 
+#include <linux/types.h>
+
 #include "utils.h"
 #include "v4l2.h"
 
