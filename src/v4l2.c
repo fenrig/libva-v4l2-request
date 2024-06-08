@@ -523,7 +523,7 @@ static void v4l2_enumerate_menu(int video_fd, __u32 id, __u32 min_index, __u32 m
 
 	for (querymenu.index = min_index; querymenu.index <= max_index; querymenu.index++) {
 		if (0 == ioctl(video_fd, VIDIOC_QUERYMENU, &querymenu)) {
-			request_log("   * %s\\n", querymenu.name);
+			request_log("   * %s\n", querymenu.name);
 		}
 	}
 }
