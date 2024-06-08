@@ -39,6 +39,7 @@
 
 #include "utils.h"
 #include "v4l2.h"
+#include "h264.h"
 
 #include "autoconfig.h"
 
@@ -53,13 +54,14 @@ VAStatus RequestCreateConfig(VADriverContextP context, VAProfile profile,
 	int i, index;
 
 	switch (profile) {
-	
 	case VAProfileH264Main:
 	case VAProfileH264High:
 	case VAProfileH264ConstrainedBaseline:
 	case VAProfileH264MultiviewHigh:
 	case VAProfileH264StereoHigh:
-		// FIXME
+		if(h264_get_controls(driver_data) < 0) {
+			return VA_STATUS_ERROR_UNSUPPORTED_PROFILE;
+		}
 		break;
 	case VAProfileMPEG2Simple:
 	case VAProfileMPEG2Main:

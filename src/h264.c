@@ -438,8 +438,7 @@ static void h264_va_slice_to_v4l2(struct request_data *driver_data,
 				     VASlice->chroma_offset_l1);
 }
 
-int h264_get_controls(struct request_data *driver_data,
-		      struct object_context *context)
+int h264_get_controls(struct request_data *driver_data)
 {
 	struct v4l2_ext_control controls[2] = {
 		{ .id = V4L2_CID_STATELESS_H264_DECODE_MODE,}, 
@@ -456,8 +455,10 @@ int h264_get_controls(struct request_data *driver_data,
 
 	switch (controls[0].value) {
 	case V4L2_STATELESS_H264_DECODE_MODE_SLICE_BASED:
+		driver_data->decode_mode = V4L2_STATELESS_H264_DECODE_MODE_SLICE_BASED;
 		break;
 	case V4L2_STATELESS_H264_DECODE_MODE_FRAME_BASED:
+		driver_data->decode_mode = V4L2_STATELESS_H264_DECODE_MODE_FRAME_BASED;
 		break;
 	default:
 		request_log("Unsupported decode mode\n");
@@ -466,10 +467,10 @@ int h264_get_controls(struct request_data *driver_data,
 
 	switch (controls[1].value) {
 	case V4L2_STATELESS_H264_START_CODE_NONE:
-		context->h264_start_code = false;
+		driver_data->start_code = V4L2_STATELESS_H264_START_CODE_NONE;
 		break;
 	case V4L2_STATELESS_H264_START_CODE_ANNEX_B:
-		context->h264_start_code = true;
+		driver_data->start_code = V4L2_STATELESS_H264_START_CODE_ANNEX_B;
 		break;
 	default:
 		request_log("Unsupported start code\n");
@@ -477,7 +478,7 @@ int h264_get_controls(struct request_data *driver_data,
 	}
 
 	if(v4l2_set_controls(driver_data->video_fd, -1, controls, 2) < 0) {
-		request_log("Couldn not set controls\n");
+		request_log("Could not set controls\n");
 		return VA_STATUS_ERROR_OPERATION_FAILED;
 	}
 
