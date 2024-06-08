@@ -52,6 +52,8 @@ VAStatus RequestCreateConfig(VADriverContextP context, VAProfile profile,
 	VAConfigID id;
 	int i, index;
 
+	request_log("fenrig: %s", __func__);
+
 	switch (profile) {
 	case VAProfileH264Main:
 	case VAProfileH264High:
@@ -97,6 +99,8 @@ VAStatus RequestDestroyConfig(VADriverContextP context, VAConfigID config_id)
 	struct request_data *driver_data = context->pDriverData;
 	struct object_config *config_object;
 
+	request_log("fenrig: %s", __func__);
+
 	config_object = CONFIG(driver_data, config_id);
 	if (config_object == NULL)
 		return VA_STATUS_ERROR_INVALID_CONFIG;
@@ -113,6 +117,8 @@ VAStatus RequestQueryConfigProfiles(VADriverContextP context,
 	struct request_data *driver_data = context->pDriverData;
 	unsigned int index = 0;
 	bool found;
+
+	request_log("fenrig: %s", __func__);
 
 	found = v4l2_find_format(driver_data->video_fd,
 				 driver_data->output_type,
@@ -149,19 +155,20 @@ VAStatus RequestQueryConfigEntrypoints(VADriverContextP context,
 				       VAEntrypoint *entrypoints,
 				       int *entrypoints_count)
 {
+	request_log("fenrig: %s", __func__);
+	
 	switch (profile) {
-	case VAProfileMPEG2Simple:
-	case VAProfileMPEG2Main:
 	case VAProfileH264Main:
 	case VAProfileH264High:
 	case VAProfileH264ConstrainedBaseline:
-	case VAProfileH264MultiviewHigh:
-	case VAProfileH264StereoHigh:
-	case VAProfileHEVCMain:
 		entrypoints[0] = VAEntrypointVLD;
 		*entrypoints_count = 1;
 		break;
-
+	case VAProfileMPEG2Simple:
+	case VAProfileMPEG2Main:
+	case VAProfileH264MultiviewHigh:
+	case VAProfileH264StereoHigh:
+	case VAProfileHEVCMain:
 	default:
 		*entrypoints_count = 0;
 		break;
@@ -179,6 +186,8 @@ VAStatus RequestQueryConfigAttributes(VADriverContextP context,
 	struct request_data *driver_data = context->pDriverData;
 	struct object_config *config_object;
 	int i;
+
+	request_log("fenrig: %s", __func__);
 
 	config_object = CONFIG(driver_data, config_id);
 	if (config_object == NULL)
@@ -207,6 +216,8 @@ VAStatus RequestGetConfigAttributes(VADriverContextP context, VAProfile profile,
 				    int attributes_count)
 {
 	unsigned int i;
+
+	request_log("fenrig: %s", __func__);
 
 	for (i = 0; i < attributes_count; i++) {
 		switch (attributes[i].type) {
