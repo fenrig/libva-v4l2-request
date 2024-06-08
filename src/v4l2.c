@@ -538,7 +538,7 @@ int v4l2_query_control(int video_fd) {
 		if (!(query_ext_ctrl.flags & V4L2_CTRL_FLAG_DISABLED)) {
 			request_log("Control: %s\n", query_ext_ctrl.name);
 		if (query_ext_ctrl.type == V4L2_CTRL_TYPE_MENU)
-			enumerate_menu(video_fd, query_ext_ctrl.id, query_ext_ctrl.minimum, query_ext_ctrl.maximum);
+			v4l2_enumerate_menu(video_fd, query_ext_ctrl.id, query_ext_ctrl.minimum, query_ext_ctrl.maximum);
 		}
 		query_ext_ctrl.id |= V4L2_CTRL_FLAG_NEXT_CTRL | V4L2_CTRL_FLAG_NEXT_COMPOUND;
 	}
