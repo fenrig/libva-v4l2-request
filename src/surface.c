@@ -70,6 +70,8 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 	bool found;
 	int rc;
 
+	request_log("fenrig: " __FUNC__ "()");
+
 	//////////// HACK: this portion of the code should get cleaned up.
 
 	// v4l2_set_format needs to be called BEFORE we create any buffers
@@ -256,6 +258,7 @@ VAStatus RequestCreateSurfaces(VADriverContextP context, int width, int height,
 			       int format, int surfaces_count,
 			       VASurfaceID *surfaces_ids)
 {
+	request_log("fenrig: " __FUNC__ "()");
 	return RequestCreateSurfaces2(context, format, width, height,
 				      surfaces_ids, surfaces_count, NULL, 0);
 }
@@ -267,6 +270,7 @@ VAStatus RequestDestroySurfaces(VADriverContextP context,
 	struct object_surface *surface_object;
 	unsigned int i, j;
 
+	request_log("fenrig: " __FUNC__ "()");
 	for (i = 0; i < surfaces_count; i++) {
 		surface_object = SURFACE(driver_data, surfaces_ids[i]);
 		if (surface_object == NULL)
@@ -302,6 +306,8 @@ VAStatus RequestSyncSurface(VADriverContextP context, VASurfaceID surface_id)
 	unsigned int output_type, capture_type;
 	int request_fd = -1;
 	int rc;
+
+	request_log("fenrig: " __FUNC__ "()");
 
 	video_format = driver_data->video_format;
 	if (video_format == NULL) {
@@ -389,6 +395,8 @@ VAStatus RequestQuerySurfaceAttributes(VADriverContextP context,
 	int memory_types;
 	unsigned int i = 0;
 
+	request_log("fenrig: " __FUNC__ "()");
+
 	attributes_list = malloc(attributes_list_size);
 	memset(attributes_list, 0, attributes_list_size);
 
@@ -460,6 +468,8 @@ VAStatus RequestQuerySurfaceStatus(VADriverContextP context,
 	struct request_data *driver_data = context->pDriverData;
 	struct object_surface *surface_object;
 
+	request_log("fenrig: " __FUNC__ "()");
+
 	surface_object = SURFACE(driver_data, surface_id);
 	if (surface_object == NULL)
 		return VA_STATUS_ERROR_INVALID_SURFACE;
@@ -476,6 +486,7 @@ VAStatus RequestPutSurface(VADriverContextP context, VASurfaceID surface_id,
 			   unsigned short dst_height, VARectangle *cliprects,
 			   unsigned int cliprects_count, unsigned int flags)
 {
+	request_log("fenrig: " __FUNC__ "()");
 	return VA_STATUS_ERROR_UNIMPLEMENTED;
 }
 
@@ -488,11 +499,13 @@ VAStatus RequestLockSurface(VADriverContextP context, VASurfaceID surface_id,
 			    unsigned int *chroma_v_offset,
 			    unsigned int *buffer_name, void **buffer)
 {
+	request_log("fenrig: " __FUNC__ "()");
 	return VA_STATUS_ERROR_UNIMPLEMENTED;
 }
 
 VAStatus RequestUnlockSurface(VADriverContextP context, VASurfaceID surface_id)
 {
+	request_log("fenrig: " __FUNC__ "()");
 	return VA_STATUS_ERROR_UNIMPLEMENTED;
 }
 
@@ -512,6 +525,8 @@ VAStatus RequestExportSurfaceHandle(VADriverContextP context,
 	unsigned int i;
 	VAStatus status;
 	int rc;
+
+	request_log("fenrig: " __FUNC__ "()");
 
 	video_format = driver_data->video_format;
 	if (video_format == NULL)

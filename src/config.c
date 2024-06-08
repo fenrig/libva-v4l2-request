@@ -39,7 +39,6 @@
 
 #include "utils.h"
 #include "v4l2.h"
-#include "h264.h"
 
 #include "autoconfig.h"
 

@@ -56,6 +56,7 @@ static VAStatus codec_store_buffer(struct request_data *driver_data,
 				   struct object_surface *surface_object,
 				   struct object_buffer *buffer_object)
 {
+	request_log("fenrig: " __FUNC__ "()");
 	switch (buffer_object->type) {
 	case VASliceDataBufferType:
 		/*
@@ -180,9 +181,12 @@ static VAStatus codec_set_controls(struct request_data *driver_data,
 {
 	int rc;
 
+	request_log("fenrig: " __FUNC__ "()");
+
 	switch (profile) {
 	case VAProfileMPEG2Simple:
 	case VAProfileMPEG2Main:
+		request_log("fenrig: mpeg2_set_controls");
 		rc = mpeg2_set_controls(driver_data, context, surface_object);
 		if (rc < 0)
 			return VA_STATUS_ERROR_OPERATION_FAILED;
@@ -193,6 +197,7 @@ static VAStatus codec_set_controls(struct request_data *driver_data,
 	case VAProfileH264ConstrainedBaseline:
 	case VAProfileH264MultiviewHigh:
 	case VAProfileH264StereoHigh:
+		request_log("fenrig: h264_set_controls");
 		rc = h264_get_controls(driver_data);
 		rc = h264_set_controls(driver_data, context, profile,
 				       surface_object);
@@ -201,6 +206,7 @@ static VAStatus codec_set_controls(struct request_data *driver_data,
 		break;
 
 	case VAProfileHEVCMain:
+		request_log("fenrig: h265_set_controls");
 		rc = h265_set_controls(driver_data, context, surface_object);
 		if (rc < 0)
 			return VA_STATUS_ERROR_OPERATION_FAILED;
@@ -219,6 +225,8 @@ VAStatus RequestBeginPicture(VADriverContextP context, VAContextID context_id,
 	struct request_data *driver_data = context->pDriverData;
 	struct object_context *context_object;
 	struct object_surface *surface_object;
+
+	request_log("fenrig: " __FUNC__ "()");
 
 	context_object = CONTEXT(driver_data, context_id);
 	if (context_object == NULL)
@@ -247,6 +255,8 @@ VAStatus RequestRenderPicture(VADriverContextP context, VAContextID context_id,
 	struct object_buffer *buffer_object;
 	int rc;
 	int i;
+
+	request_log("fenrig: " __FUNC__ "()");
 
 	context_object = CONTEXT(driver_data, context_id);
 	if (context_object == NULL)
@@ -287,6 +297,8 @@ VAStatus RequestEndPicture(VADriverContextP context, VAContextID context_id)
 	int request_fd;
 	VAStatus status;
 	int rc;
+
+	request_log("fenrig: " __FUNC__ "()");
 
 	video_format = driver_data->video_format;
 	if (video_format == NULL)

@@ -69,7 +69,7 @@ VAStatus VA_DRIVER_INIT_FUNC(VADriverContextP context)
 	char *media_path;
 	int rc;
 
-	request_log("fenrig init\n");
+	request_log("fenrig: " __FUNC__ "()");
 
 	context->version_major = VA_MAJOR_VERSION;
 	context->version_minor = VA_MINOR_VERSION;
