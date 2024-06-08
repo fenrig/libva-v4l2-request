@@ -442,17 +442,17 @@ int h264_get_controls(struct request_data *driver_data,
 		      struct object_context *context)
 {
 	struct v4l2_ext_control controls[2] = {
-		{
-			.id = V4L2_CID_STATELESS_H264_DECODE_MODE,
-		}, {
-			.id = V4L2_CID_STATELESS_H264_START_CODE,
-		}
+		{ .id = V4L2_CID_STATELESS_H264_DECODE_MODE,}, 
+		{ .id = V4L2_CID_STATELESS_H264_START_CODE, },
 	};
 	int rc;
 
+	request_log("fenrig: h264_get_controls");
 	rc = v4l2_get_controls(driver_data->video_fd, -1, controls, 2);
-	if (rc < 0)
+	if (rc < 0) {
+		request_log("Couldnt get controls");
 		return VA_STATUS_ERROR_OPERATION_FAILED;
+	}
 
 	switch (controls[0].value) {
 	case V4L2_STATELESS_H264_DECODE_MODE_SLICE_BASED:
@@ -476,7 +476,12 @@ int h264_get_controls(struct request_data *driver_data,
 		return VA_STATUS_ERROR_OPERATION_FAILED;
 	}
 
-	request_log("fenrig: h264_get_controls");
+	if(v4l2_set_controls(driver_data->video_fd, -1, &controls, 2) < 0) {
+		request_log("Couldn not set controls\n");
+		return VA_STATUS_ERROR_OPERATION_FAILED;
+	}
+
+	request_log("fenrig: h264_get_controls success");
 	return VA_STATUS_SUCCESS;
 }
 
