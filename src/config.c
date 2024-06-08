@@ -57,12 +57,9 @@ VAStatus RequestCreateConfig(VADriverContextP context, VAProfile profile,
 	case VAProfileH264Main:
 	case VAProfileH264High:
 	case VAProfileH264ConstrainedBaseline:
+		break;
 	case VAProfileH264MultiviewHigh:
 	case VAProfileH264StereoHigh:
-		if(h264_get_controls(driver_data) < 0) {
-			return VA_STATUS_ERROR_UNSUPPORTED_PROFILE;
-		}
-		break;
 	case VAProfileMPEG2Simple:
 	case VAProfileMPEG2Main:
 	case VAProfileHEVCMain:

@@ -446,10 +446,10 @@ int h264_get_controls(struct request_data *driver_data)
 	};
 	int rc;
 
-	request_log("fenrig: h264_get_controls");
+	request_log("fenrig: h264_get_controls\n");
 	rc = v4l2_get_controls(driver_data->video_fd, -1, controls, 2);
 	if (rc < 0) {
-		request_log("Couldnt get controls");
+		request_log("Couldnt get controls\n");
 		return VA_STATUS_ERROR_OPERATION_FAILED;
 	}
 
@@ -482,7 +482,7 @@ int h264_get_controls(struct request_data *driver_data)
 		return VA_STATUS_ERROR_OPERATION_FAILED;
 	}
 
-	request_log("fenrig: h264_get_controls success");
+	request_log("fenrig: h264_get_controls success\n");
 	return VA_STATUS_SUCCESS;
 }
 

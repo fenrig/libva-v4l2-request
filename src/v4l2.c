@@ -52,7 +52,6 @@ static bool v4l2_type_is_mplane(unsigned int type)
 	case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
 	case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
 		return true;
-
 	default:
 		return false;
 	}
@@ -102,16 +101,20 @@ static void v4l2_setup_format(struct v4l2_format *format, unsigned int type,
 
 	sizeimage = v4l2_type_is_output(type) ? SOURCE_SIZE_MAX : 0;
 
-	if (v4l2_type_is_mplane(type)) {
-		format->fmt.pix_mp.width = width;
-		format->fmt.pix_mp.height = height;
-		format->fmt.pix_mp.plane_fmt[0].sizeimage = sizeimage;
-		format->fmt.pix_mp.pixelformat = pixelformat;
-	} else {
-		format->fmt.pix.width = width;
-		format->fmt.pix.height = height;
-		format->fmt.pix.sizeimage = sizeimage;
-		format->fmt.pix.pixelformat = pixelformat;
+	switch(type) {
+		case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
+		case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+			format->fmt.pix_mp.width = width;
+			format->fmt.pix_mp.height = height;
+			format->fmt.pix_mp.plane_fmt[0].sizeimage = sizeimage;
+			format->fmt.pix_mp.pixelformat = pixelformat;
+			break;
+		default:
+			format->fmt.pix.width = width;
+			format->fmt.pix.height = height;
+			format->fmt.pix.sizeimage = sizeimage;
+			format->fmt.pix.pixelformat = pixelformat;
+			break;
 	}
 }
 

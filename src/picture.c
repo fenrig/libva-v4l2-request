@@ -193,6 +193,7 @@ static VAStatus codec_set_controls(struct request_data *driver_data,
 	case VAProfileH264ConstrainedBaseline:
 	case VAProfileH264MultiviewHigh:
 	case VAProfileH264StereoHigh:
+		rc = h264_get_controls(driver_data);
 		rc = h264_set_controls(driver_data, context, profile,
 				       surface_object);
 		if (rc < 0)
