@@ -531,7 +531,7 @@ int h264_set_controls(struct request_data *driver_data,
 
 	sps.profile_idc = h264_profile_to_idc(profile);
 
-	struct v4l2_ext_control controls[6] = {
+	struct v4l2_ext_control controls[5] = {
 		{
 			.id = V4L2_CID_STATELESS_H264_SPS,
 			.p_h264_sps = &sps,
@@ -552,15 +552,11 @@ int h264_set_controls(struct request_data *driver_data,
 			.id = V4L2_CID_STATELESS_H264_DECODE_PARAMS,
 			.p_h264_decode_params = &decode,
 			.size = sizeof(decode),
-		}, {
-			.id = V4L2_CID_STATELESS_H264_PRED_WEIGHTS,
-			.ptr = &weights,
-			.size = sizeof(weights),
 		}
 	};
 
 	rc = v4l2_set_controls(driver_data->video_fd, surface->request_fd,
-			       controls, 6);
+			       controls, 5);
 	if (rc < 0)
 		return VA_STATUS_ERROR_OPERATION_FAILED;
 
