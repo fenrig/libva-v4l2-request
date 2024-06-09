@@ -186,7 +186,7 @@ static VAStatus codec_set_controls(struct request_data *driver_data,
 	switch (profile) {
 	case VAProfileMPEG2Simple:
 	case VAProfileMPEG2Main:
-		request_log("fenrig: mpeg2_set_controls");
+		request_log("fenrig: mpeg2_set_controls\n");
 		rc = mpeg2_set_controls(driver_data, context, surface_object);
 		if (rc < 0)
 			return VA_STATUS_ERROR_OPERATION_FAILED;
@@ -197,7 +197,7 @@ static VAStatus codec_set_controls(struct request_data *driver_data,
 	case VAProfileH264ConstrainedBaseline:
 	case VAProfileH264MultiviewHigh:
 	case VAProfileH264StereoHigh:
-		request_log("fenrig: h264_set_controls");
+		request_log("fenrig: h264_set_controls\n");
 		rc = h264_set_controls(driver_data, context, profile,
 				       surface_object);
 		if (rc < 0)
@@ -205,7 +205,7 @@ static VAStatus codec_set_controls(struct request_data *driver_data,
 		break;
 
 	case VAProfileHEVCMain:
-		request_log("fenrig: h265_set_controls");
+		request_log("fenrig: h265_set_controls\n");
 		rc = h265_set_controls(driver_data, context, surface_object);
 		if (rc < 0)
 			return VA_STATUS_ERROR_OPERATION_FAILED;
@@ -347,6 +347,10 @@ VAStatus RequestEndPicture(VADriverContextP context, VAContextID context_id)
 			       surface_object->slices_size, 1);
 	if (rc < 0)
 		return VA_STATUS_ERROR_OPERATION_FAILED;
+
+	if(v4l2_queue_request(request_fd) < 0) {
+		request_log("Todo dequeue buffer");
+	}
 
 	surface_object->slices_size = 0;
 
