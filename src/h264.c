@@ -538,11 +538,11 @@ int h264_set_controls(struct request_data *driver_data,
 				&decode, &pps, &sps);
 	h264_va_matrix_to_v4l2(driver_data, context,
 			       &surface->params.h264.matrix, &matrix);
-
-	if(context->decode_mode == V4L2_STATELESS_H264_DECODE_MODE_SLICE_BASED) {
-		h264_va_slice_to_v4l2(driver_data, context,
+	h264_va_slice_to_v4l2(driver_data, context,
 					&surface->params.h264.slice,
 					&surface->params.h264.picture, &slice, &weights);
+
+	if(context->decode_mode == V4L2_STATELESS_H264_DECODE_MODE_SLICE_BASED) {
 		amount_of_controls = 6;
 	}
 
