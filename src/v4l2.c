@@ -28,6 +28,8 @@
 #include <sys/ioctl.h>
 
 #include <linux/videodev2.h>
+#include <linux/v4l2-controls.h>
+#include <linux/media.h>
 
 #include <linux/types.h>
 
@@ -551,9 +553,9 @@ int v4l2_query_control(int video_fd) {
 
 int v4l2_queue_request(int request_fd) {
 	int ret;
-	ret = ioctl(req->request_fd, MEDIA_REQUEST_IOC_QUEUE, NULL);
+	ret = ioctl(request_fd, MEDIA_REQUEST_IOC_QUEUE, NULL);
 	if(ret < 0) {
-		request_log("Queue request %d failed: (%d) %s", req->request_fd, errno, strerror(errno)); 
+		request_log("Queue request %d failed: (%d) %s", request_fd, errno, strerror(errno)); 
 	}
 	return ret;
 }
