@@ -550,12 +550,3 @@ int v4l2_query_control(int video_fd) {
 
 	return 0;
 }
-
-int v4l2_queue_request(int request_fd) {
-	int ret;
-	ret = ioctl(request_fd, MEDIA_REQUEST_IOC_QUEUE, NULL);
-	if(ret < 0) {
-		request_log("Queue request %d failed: (%d) %s", request_fd, errno, strerror(errno)); 
-	}
-	return ret;
-}

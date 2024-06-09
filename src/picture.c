@@ -65,6 +65,7 @@ static VAStatus codec_store_buffer(struct request_data *driver_data,
 		 * RenderPicture), we can't use a V4L2 buffer directly
 		 * and have to copy from a regular buffer.
 		 */
+		request_log("fenrig: VASliceDataBufferType");
 		if (context->h264_start_code) {
 			static const char start_code[3] = { 0x00, 0x00, 0x01 };
 
@@ -83,6 +84,7 @@ static VAStatus codec_store_buffer(struct request_data *driver_data,
 		break;
 
 	case VAPictureParameterBufferType:
+		request_log("fenrig: VAPictureParameterBufferType");
 		switch (profile) {
 		case VAProfileMPEG2Simple:
 		case VAProfileMPEG2Main:
@@ -96,6 +98,7 @@ static VAStatus codec_store_buffer(struct request_data *driver_data,
 		case VAProfileH264ConstrainedBaseline:
 		case VAProfileH264MultiviewHigh:
 		case VAProfileH264StereoHigh:
+			request_log("fenrig: surface_object->params.h264.picture");
 			memcpy(&surface_object->params.h264.picture,
 			       buffer_object->data,
 			       sizeof(surface_object->params.h264.picture));
@@ -113,12 +116,14 @@ static VAStatus codec_store_buffer(struct request_data *driver_data,
 		break;
 
 	case VASliceParameterBufferType:
+		request_log("fenrig: VASliceParameterBufferType");
 		switch (profile) {
 		case VAProfileH264Main:
 		case VAProfileH264High:
 		case VAProfileH264ConstrainedBaseline:
 		case VAProfileH264MultiviewHigh:
 		case VAProfileH264StereoHigh:
+			request_log("fenrig: surface_object->params.h264.slice");
 			memcpy(&surface_object->params.h264.slice,
 			       buffer_object->data,
 			       sizeof(surface_object->params.h264.slice));
@@ -136,6 +141,7 @@ static VAStatus codec_store_buffer(struct request_data *driver_data,
 		break;
 
 	case VAIQMatrixBufferType:
+		request_log("fenrig: VAIQMatrixBufferType");
 		switch (profile) {
 		case VAProfileMPEG2Simple:
 		case VAProfileMPEG2Main:
@@ -150,6 +156,7 @@ static VAStatus codec_store_buffer(struct request_data *driver_data,
 		case VAProfileH264ConstrainedBaseline:
 		case VAProfileH264MultiviewHigh:
 		case VAProfileH264StereoHigh:
+			request_log("fenrig: surface_object->params.h264.matrix");
 			memcpy(&surface_object->params.h264.matrix,
 			       buffer_object->data,
 			       sizeof(surface_object->params.h264.matrix));
@@ -347,10 +354,6 @@ VAStatus RequestEndPicture(VADriverContextP context, VAContextID context_id)
 			       surface_object->slices_size, 1);
 	if (rc < 0)
 		return VA_STATUS_ERROR_OPERATION_FAILED;
-
-	if(v4l2_queue_request(request_fd) < 0) {
-		request_log("Todo dequeue buffer");
-	}
 
 	surface_object->slices_size = 0;
 
