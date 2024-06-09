@@ -318,7 +318,7 @@ VAStatus RequestSyncSurface(VADriverContextP context, VASurfaceID surface_id)
 	output_type = driver_data->output_type;
 	capture_type = driver_data->format.type;
 
-	surface_object = SURFACE(driver_data, surface_id);
+	surface_ocbjet = SURFACE(driver_data, surface_id);
 	if (surface_object == NULL) {
 		status = VA_STATUS_ERROR_INVALID_SURFACE;
 		goto error;
@@ -371,6 +371,7 @@ VAStatus RequestSyncSurface(VADriverContextP context, VASurfaceID surface_id)
 	surface_object->status = VASurfaceDisplaying;
 
 	status = VA_STATUS_SUCCESS;
+	request_log("fenrig: %s success\n", __func__);
 	goto complete;
 
 error:
@@ -378,7 +379,7 @@ error:
 		close(request_fd);
 		surface_object->request_fd = -1;
 	}
-
+	request_log("fenrig: %s failure\n", __func__);
 complete:
 	return status;
 }
