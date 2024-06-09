@@ -167,11 +167,11 @@ VAStatus VA_DRIVER_INIT_FUNC(VADriverContextP context)
 	}
 
 	if((capabilities & V4L2_CAP_VIDEO_M2M_MPLANE) == V4L2_CAP_VIDEO_M2M_MPLANE) {
-		request_log("fenrig: V4L2_CAP_VIDEO_M2M_MPLANE");
+		request_log("fenrig: V4L2_CAP_VIDEO_M2M_MPLANE\n");
 		driver_data->output_type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
 		driver_data->format.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
 	} else if((capabilities & V4L2_CAP_VIDEO_M2M) == V4L2_CAP_VIDEO_M2M) {
-		request_log("fenrig: V4L2_CAP_VIDEO_M2M");
+		request_log("fenrig: V4L2_CAP_VIDEO_M2M\n");
 		driver_data->output_type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
 		driver_data->format.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
 	} else {
