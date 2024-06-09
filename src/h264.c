@@ -455,9 +455,11 @@ int h264_get_controls(struct request_data *driver_data, struct object_context *c
 
 	switch (controls[0].value) {
 	case V4L2_STATELESS_H264_DECODE_MODE_SLICE_BASED:
+		request_log("V4L2_STATELESS_H264_DECODE_MODE_SLICE_BASED");
 		context_object->decode_mode = V4L2_STATELESS_H264_DECODE_MODE_SLICE_BASED;
 		break;
 	case V4L2_STATELESS_H264_DECODE_MODE_FRAME_BASED:
+		request_log("V4L2_STATELESS_H264_DECODE_MODE_FRAME_BASED");
 		context_object->decode_mode = V4L2_STATELESS_H264_DECODE_MODE_FRAME_BASED;
 		break;
 	default:
@@ -467,10 +469,12 @@ int h264_get_controls(struct request_data *driver_data, struct object_context *c
 
 	switch (controls[1].value) {
 	case V4L2_STATELESS_H264_START_CODE_NONE:
+		request_log("V4L2_STATELESS_H264_START_CODE_NONE");
 		context_object->start_code = V4L2_STATELESS_H264_START_CODE_NONE;
 		context_object->h264_start_code = false;
 		break;
 	case V4L2_STATELESS_H264_START_CODE_ANNEX_B:
+		request_log("V4L2_STATELESS_H264_START_CODE_ANNEX_B");
 		context_object->start_code = V4L2_STATELESS_H264_START_CODE_ANNEX_B;
 		context_object->h264_start_code = true;
 		break;
@@ -484,7 +488,6 @@ int h264_get_controls(struct request_data *driver_data, struct object_context *c
 		return VA_STATUS_ERROR_OPERATION_FAILED;
 	}
 
-	request_log("fenrig: h264_get_controls success\n");
 	return VA_STATUS_SUCCESS;
 }
 
