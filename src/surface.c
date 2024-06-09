@@ -318,7 +318,7 @@ VAStatus RequestSyncSurface(VADriverContextP context, VASurfaceID surface_id)
 	output_type = driver_data->output_type;
 	capture_type = driver_data->format.type;
 
-	surface_ocbjet = SURFACE(driver_data, surface_id);
+	surface_object = SURFACE(driver_data, surface_id);
 	if (surface_object == NULL) {
 		status = VA_STATUS_ERROR_INVALID_SURFACE;
 		goto error;
