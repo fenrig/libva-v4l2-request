@@ -572,7 +572,7 @@ int h264_set_controls(struct request_data *driver_data,
 	};
 
 	rc = v4l2_set_controls(driver_data->video_fd, surface->request_fd,
-			       controls, (sizeof(controls) / sizeof(struct v4l2_ext_control)));
+			       controls, 6);
 	if (rc < 0)
 		return VA_STATUS_ERROR_OPERATION_FAILED;
 
