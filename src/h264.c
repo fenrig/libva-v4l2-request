@@ -455,11 +455,11 @@ int h264_get_controls(struct request_data *driver_data, struct object_context *c
 
 	switch (controls[0].value) {
 	case V4L2_STATELESS_H264_DECODE_MODE_SLICE_BASED:
-		request_log("V4L2_STATELESS_H264_DECODE_MODE_SLICE_BASED");
+		request_log("V4L2_STATELESS_H264_DECODE_MODE_SLICE_BASED\n");
 		context_object->decode_mode = V4L2_STATELESS_H264_DECODE_MODE_SLICE_BASED;
 		break;
 	case V4L2_STATELESS_H264_DECODE_MODE_FRAME_BASED:
-		request_log("V4L2_STATELESS_H264_DECODE_MODE_FRAME_BASED");
+		request_log("V4L2_STATELESS_H264_DECODE_MODE_FRAME_BASED\n");
 		context_object->decode_mode = V4L2_STATELESS_H264_DECODE_MODE_FRAME_BASED;
 		break;
 	default:
@@ -469,12 +469,12 @@ int h264_get_controls(struct request_data *driver_data, struct object_context *c
 
 	switch (controls[1].value) {
 	case V4L2_STATELESS_H264_START_CODE_NONE:
-		request_log("V4L2_STATELESS_H264_START_CODE_NONE");
+		request_log("V4L2_STATELESS_H264_START_CODE_NONE\n");
 		context_object->start_code = V4L2_STATELESS_H264_START_CODE_NONE;
 		context_object->h264_start_code = false;
 		break;
 	case V4L2_STATELESS_H264_START_CODE_ANNEX_B:
-		request_log("V4L2_STATELESS_H264_START_CODE_ANNEX_B");
+		request_log("V4L2_STATELESS_H264_START_CODE_ANNEX_B\n");
 		context_object->start_code = V4L2_STATELESS_H264_START_CODE_ANNEX_B;
 		context_object->h264_start_code = true;
 		break;
@@ -522,6 +522,7 @@ int h264_set_controls(struct request_data *driver_data,
 	struct v4l2_ctrl_h264_sps sps = { 0 };
 	struct h264_dpb_entry *output;
 	int rc;
+	unsigned int amount_of_controls = 4;
 
 	output = dpb_lookup(context, &surface->params.h264.picture.CurrPic,
 			    NULL, NULL);
@@ -542,6 +543,7 @@ int h264_set_controls(struct request_data *driver_data,
 		h264_va_slice_to_v4l2(driver_data, context,
 					&surface->params.h264.slice,
 					&surface->params.h264.picture, &slice, &weights);
+		amount_of_controls = 6;
 	}
 
 	sps.profile_idc = h264_profile_to_idc(profile);
@@ -560,13 +562,13 @@ int h264_set_controls(struct request_data *driver_data,
 			.p_h264_scaling_matrix = &matrix,
 			.size = sizeof(matrix),
 		}, {
-			.id = V4L2_CID_STATELESS_H264_SLICE_PARAMS,
-			.p_h264_slice_params = &slice,
-			.size = sizeof(slice),
-		}, {
 			.id = V4L2_CID_STATELESS_H264_DECODE_PARAMS,
 			.p_h264_decode_params = &decode,
 			.size = sizeof(decode),
+		}, {
+			.id = V4L2_CID_STATELESS_H264_SLICE_PARAMS,
+			.p_h264_slice_params = &slice,
+			.size = sizeof(slice),
 		}, {
 			.id = V4L2_CID_STATELESS_H264_PRED_WEIGHTS,
 			.ptr = &weights,
@@ -575,7 +577,7 @@ int h264_set_controls(struct request_data *driver_data,
 	};
 
 	rc = v4l2_set_controls(driver_data->video_fd, surface->request_fd,
-			       controls, 6);
+			       controls, amount_of_controls);
 	if (rc < 0)
 		return VA_STATUS_ERROR_OPERATION_FAILED;
 
