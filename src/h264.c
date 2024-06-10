@@ -243,7 +243,7 @@ static void h264_va_picture_to_v4l2(struct request_data *driver_data,
 
 	h264_fill_dpb(driver_data, context, decode);
 
-	//decode->num_slices = surface->slices_count;
+	decode->frame_num = surface->slices_count;
 	decode->nal_ref_idc = nal_ref_idc;
 	if (nal_unit_type == 5)
 		decode->flags = V4L2_H264_DECODE_PARAM_FLAG_IDR_PIC;
@@ -355,7 +355,7 @@ static void h264_va_slice_to_v4l2(struct request_data *driver_data,
 				  VASliceParameterBufferH264 *VASlice,
 				  VAPictureParameterBufferH264 *VAPicture,
 				  struct v4l2_ctrl_h264_slice_params *slice,
-				  struct v4l2_ctrl_h264_pred_weights *weights)
+				  struct v4l2_h264_pred_weight_table *weights)
 {
 	slice->header_bit_size = VASlice->slice_data_bit_offset;
 	//if (context->h264_start_code)	
@@ -522,7 +522,7 @@ int h264_set_controls(struct request_data *driver_data,
 	struct v4l2_ctrl_h264_sps sps = { 0 };
 	struct h264_dpb_entry *output;
 	int rc;
-	unsigned int amount_of_controls = 5;
+	unsigned int amount_of_controls = 4;
 
 	output = dpb_lookup(context, &surface->params.h264.picture.CurrPic,
 			    NULL, NULL);
@@ -538,11 +538,12 @@ int h264_set_controls(struct request_data *driver_data,
 				&decode, &pps, &sps);
 	h264_va_matrix_to_v4l2(driver_data, context,
 			       &surface->params.h264.matrix, &matrix);
-	h264_va_slice_to_v4l2(driver_data, context,
-					&surface->params.h264.slice,
-					&surface->params.h264.picture, &slice, &weights);
+	
 
 	if(context->decode_mode == V4L2_STATELESS_H264_DECODE_MODE_SLICE_BASED) {
+		h264_va_slice_to_v4l2(driver_data, context,
+					&surface->params.h264.slice,
+					&surface->params.h264.picture, &slice, &weights);
 		amount_of_controls = 6;
 	}
 
