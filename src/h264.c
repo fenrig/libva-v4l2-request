@@ -355,7 +355,7 @@ static void h264_va_slice_to_v4l2(struct request_data *driver_data,
 				  VASliceParameterBufferH264 *VASlice,
 				  VAPictureParameterBufferH264 *VAPicture,
 				  struct v4l2_ctrl_h264_slice_params *slice,
-				  struct v4l2_h264_pred_weight_table *weights)
+				  struct v4l2_ctrl_h264_pred_weights *weights)
 {
 	slice->header_bit_size = VASlice->slice_data_bit_offset;
 	//if (context->h264_start_code)	
