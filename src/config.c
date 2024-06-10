@@ -52,6 +52,7 @@ VAStatus RequestCreateConfig(VADriverContextP context, VAProfile profile,
 	VAConfigID id;
 	int i, index;
 	unsigned int pixelformat;
+	int rc;
 
 	request_log("fenrig: %s\n", __func__);
 
@@ -66,14 +67,13 @@ VAStatus RequestCreateConfig(VADriverContextP context, VAProfile profile,
 			return VA_STATUS_ERROR_UNSUPPORTED_PROFILE;
 	}
 
-	rc = v4l2_query_formats(driver_data->video_fd, output_type, pixelformat);
+	rc = v4l2_query_formats(driver_data->video_fd, driver_data->output_type, pixelformat);
 	if(rc < 0) {
 		request_log("Determined video format not supported");
 		return VA_STATUS_ERROR_UNSUPPORTED_PROFILE;
 	}
 
-	rc = v4l2_set_format(driver_data->video_fd, output_type, pixelformat,
-				1280, 720);
+	rc = v4l2_set_format(driver_data->video_fd, driver_data->output_type, pixelformat, 1280, 720);
 	if (rc < 0) {
 		request_log("Determined video format not set");
 		return VA_STATUS_ERROR_UNSUPPORTED_PROFILE;
