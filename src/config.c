@@ -51,20 +51,31 @@ VAStatus RequestCreateConfig(VADriverContextP context, VAProfile profile,
 	struct object_config *config_object;
 	VAConfigID id;
 	int i, index;
+	unsigned int pixelformat;
 
 	request_log("fenrig: %s\n", __func__);
 
-	switch (profile) {
-	case VAProfileH264Main:
-	case VAProfileH264High:
-	case VAProfileH264ConstrainedBaseline:
-		break;
-	case VAProfileH264MultiviewHigh:
-	case VAProfileH264StereoHigh:
-	case VAProfileMPEG2Simple:
-	case VAProfileMPEG2Main:
-	case VAProfileHEVCMain:
-	default:
+	switch(config_object->profile) {
+		case VAProfileH264Main:
+		case VAProfileH264High:
+		case VAProfileH264ConstrainedBaseline:
+			pixelformat = V4L2_PIX_FMT_H264_SLICE;
+			break;
+		default:
+			request_log("Cannot determine pixelformat");
+			return VA_STATUS_ERROR_UNSUPPORTED_PROFILE;
+	}
+
+	rc = v4l2_query_formats(driver_data->video_fd, output_type, pixelformat);
+	if(rc < 0) {
+		request_log("Determined video format not supported");
+		return VA_STATUS_ERROR_UNSUPPORTED_PROFILE;
+	}
+
+	rc = v4l2_set_format(driver_data->video_fd, output_type, pixelformat,
+				1280, 720);
+	if (rc < 0) {
+		request_log("Determined video format not set");
 		return VA_STATUS_ERROR_UNSUPPORTED_PROFILE;
 	}
 

@@ -60,7 +60,6 @@ VAStatus RequestCreateContext(VADriverContextP context, VAConfigID config_id,
 	struct video_format *video_format = driver_data->video_format;
 	unsigned int length;
 	unsigned int offset;
-	unsigned int pixelformat;
 	void *source_data = MAP_FAILED;
 	VASurfaceID *ids = NULL;
 	VAContextID id;
@@ -91,32 +90,6 @@ VAStatus RequestCreateContext(VADriverContextP context, VAConfigID config_id,
 		goto error;
 	}
 	memset(&context_object->dpb, 0, sizeof(context_object->dpb));
-
-	switch(config_object->profile) {
-		case VAProfileH264Main:
-		case VAProfileH264High:
-		case VAProfileH264ConstrainedBaseline:
-			pixelformat = V4L2_PIX_FMT_H264_SLICE;
-			break;
-		default:
-			request_log("Cannot determine pixelformat");
-			status = VA_STATUS_ERROR_OPERATION_FAILED;
-			goto error;
-	}
-
-	rc = v4l2_query_formats(driver_data->video_fd, output_type, pixelformat);
-	if(rc < 0) {
-		request_log("Determined video format not supported");
-		status = VA_STATUS_ERROR_ALLOCATION_FAILED;
-		goto error;
-	}
-
-	rc = v4l2_set_format(driver_data->video_fd, output_type, pixelformat,
-				1280, 720);
-	if (rc < 0) {
-		return VA_STATUS_ERROR_OPERATION_FAILED;
-	}
-
 
 	rc = v4l2_create_buffers(driver_data->video_fd, output_type,
 				&surfaces_count, &index_base);
