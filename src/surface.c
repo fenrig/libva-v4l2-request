@@ -80,7 +80,7 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 			return VA_STATUS_ERROR_UNSUPPORTED_PROFILE;
 		}
 
-		rc = v4l2_set_format(driver_data->video_fd, driver_data->output_type, pixelformat, 1024, 1024);
+		rc = v4l2_set_format(driver_data->video_fd, driver_data->output_type, pixelformat, width, height);
 		if (rc < 0) {
 			request_log("Determined video format not set");
 			return VA_STATUS_ERROR_UNSUPPORTED_PROFILE;
