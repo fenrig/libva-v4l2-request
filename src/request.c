@@ -109,7 +109,7 @@ VAStatus VA_DRIVER_INIT_FUNC(VADriverContextP context)
 	vtable->vaQuerySurfaceAttributes = RequestQuerySurfaceAttributes;
 	vtable->vaQuerySurfaceStatus = RequestQuerySurfaceStatus;
 	vtable->vaPutSurface = RequestPutSurface;
-	vtable->vaQueryImageFormats = %;
+	vtable->vaQueryImageFormats = RequestQueryImageFormats;
 	vtable->vaCreateImage = RequestCreateImage;
 	vtable->vaDeriveImage = RequestDeriveImage;
 	vtable->vaDestroyImage = RequestDestroyImage;
