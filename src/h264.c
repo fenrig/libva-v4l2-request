@@ -522,7 +522,7 @@ int h264_set_controls(struct request_data *driver_data,
 	struct v4l2_ctrl_h264_sps sps = { 0 };
 	struct h264_dpb_entry *output;
 	int rc;
-	unsigned int amount_of_controls = 4;
+	unsigned int amount_of_controls = 5;
 
 	output = dpb_lookup(context, &surface->params.h264.picture.CurrPic,
 			    NULL, NULL);
