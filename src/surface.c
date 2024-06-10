@@ -46,6 +46,8 @@
 #include "v4l2.h"
 #include "video.h"
 
+bool setformatonce = false;
+
 VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 				unsigned int width, unsigned int height,
 				VASurfaceID *surfaces_ids,
@@ -69,6 +71,22 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 	int rc;
 
 	request_log("fenrig: %s\n", __func__);
+
+	if(setformatonce == false) {
+		rc = v4l2_query_formats(driver_data->video_fd, driver_data->output_type, pixelformat);
+		if(rc < 0) {
+			request_log("Determined video format not supported");
+			return VA_STATUS_ERROR_UNSUPPORTED_PROFILE;
+		}
+
+		rc = v4l2_set_format(driver_data->video_fd, driver_data->output_type, pixelformat, 1024, 1024);
+		if (rc < 0) {
+			request_log("Determined video format not set");
+			return VA_STATUS_ERROR_UNSUPPORTED_PROFILE;
+		}
+
+		setformatonce = true;
+	}
 
 	if (format != VA_RT_FORMAT_YUV420){
 		request_log("Format not VA_RT_FORMAT_YUV420\n");
