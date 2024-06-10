@@ -111,6 +111,8 @@ VAStatus RequestCreateContext(VADriverContextP context, VAConfigID config_id,
 
 	memcpy(ids, surfaces_ids, surfaces_count * sizeof(VASurfaceID));
 
+	v4l2_query_formats(driver_data->video_fd, output_type, V4L2_PIX_FMT_H264_SLICE);
+
 	for (i = 0; i < surfaces_count; i++) {
 		index = index_base + i;
 

@@ -34,6 +34,7 @@ unsigned int v4l2_type_video_capture(bool mplane);
 int v4l2_query_capabilities(int video_fd, unsigned int *capabilities);
 bool v4l2_find_format(int video_fd, unsigned int type,
 		      unsigned int pixelformat);
+int v4l2_query_formats(int video_fd, unsigned int type, uint32_t pixelformat);
 int v4l2_set_format(int video_fd, unsigned int type, unsigned int pixelformat,
 		    unsigned int width, unsigned int height);
 int v4l2_get_format(int video_fd, unsigned int type, unsigned int *width,

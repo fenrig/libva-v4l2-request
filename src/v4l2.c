@@ -550,3 +550,22 @@ int v4l2_query_control(int video_fd) {
 
 	return 0;
 }
+
+int v4l2_query_formats(int video_fd, unsigned int type, uint32_t pixelformat) {
+    struct v4l2_fmtdesc fmtdesc = {
+        .index = 0,
+        .type = type,
+    };
+
+    while (ioctl(ctx->video_fd, VIDIOC_ENUM_FMT, &fmtdesc) >= 0) {
+		request_log("Found pixelformat %s: (%u)", fmtdesc.description, pixelformat);
+        if (fmtdesc.pixelformat == pixelformat) {
+        	request_log("Found pixelformat");
+			return 0;
+		}
+
+        fmtdesc.index++;
+    }
+
+	return -1;
+}
