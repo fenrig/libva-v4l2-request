@@ -55,14 +55,21 @@ VAStatus RequestCreateConfig(VADriverContextP context, VAProfile profile,
 
 	request_log("fenrig: %s\n", __func__);
 
-	switch(config_object->profile) {
-		case VAProfileH264Main:
-		case VAProfileH264High:
-		case VAProfileH264ConstrainedBaseline:
-			break;
-		default:
-			request_log("Cannot determine pixelformat");
-			return VA_STATUS_ERROR_UNSUPPORTED_PROFILE;
+	switch (profile) {
+	case VAProfileMPEG2Simple:
+	case VAProfileMPEG2Main:
+	case VAProfileH264Main:
+	case VAProfileH264High:
+	case VAProfileH264ConstrainedBaseline:
+	case VAProfileH264MultiviewHigh:
+	case VAProfileH264StereoHigh:
+		case VAProfileHEVCMain:
+		if (entrypoint != VAEntrypointVLD)
+			return VA_STATUS_ERROR_UNSUPPORTED_ENTRYPOINT;
+		break;
+
+	default:
+		return VA_STATUS_ERROR_UNSUPPORTED_PROFILE;
 	}
 
 	if (attributes_count > V4L2_REQUEST_MAX_CONFIG_ATTRIBUTES)
