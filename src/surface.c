@@ -62,7 +62,7 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 	unsigned int destination_bytesperlines[VIDEO_MAX_PLANES];
 	unsigned int destination_planes_count;
 	unsigned int format_width, format_height;
-	unsigned int capture_type;
+	unsigned int capture_type = driver_data->format.type;;
 	unsigned int index_base;
 	unsigned int pixelformat = V4L2_PIX_FMT_H264_SLICE;
 	unsigned int index;
