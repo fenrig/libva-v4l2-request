@@ -551,7 +551,7 @@ int v4l2_query_control(int video_fd) {
 	return 0;
 }
 
-int v4l2_query_formats(int video_fd, unsigned int type, uint32_t pixelformat) {
+int v4l2_query_formats(int video_fd, unsigned int type, __u32 pixelformat) {
     struct v4l2_fmtdesc fmtdesc = {
         .index = 0,
         .type = type,
