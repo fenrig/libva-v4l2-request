@@ -558,9 +558,9 @@ int v4l2_query_formats(int video_fd, unsigned int type, __u32 pixelformat) {
     };
 
     while (ioctl(video_fd, VIDIOC_ENUM_FMT, &fmtdesc) >= 0) {
-		request_log("Found pixelformat %s: (%u)", fmtdesc.description, pixelformat);
+		request_log("Found pixelformat %s: (%u)\n ", fmtdesc.description, pixelformat);
         if (fmtdesc.pixelformat == pixelformat) {
-        	request_log("Found pixelformat");
+        	request_log("Found pixelformat\n");
 			return 0;
 		}
 
