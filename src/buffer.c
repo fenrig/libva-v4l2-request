@@ -55,6 +55,8 @@ VAStatus RequestCreateBuffer(VADriverContextP context, VAContextID context_id,
 	VAStatus status;
 	VABufferID id;
 
+	request_log("fenrig: %s\n", __func__);
+
 	switch (type) {
 	case VAPictureParameterBufferType:
 	case VAIQMatrixBufferType:
@@ -112,6 +114,8 @@ VAStatus RequestDestroyBuffer(VADriverContextP context, VABufferID buffer_id)
 	struct request_data *driver_data = context->pDriverData;
 	struct object_buffer *buffer_object;
 
+	request_log("fenrig: %s\n", __func__);
+
 	buffer_object = BUFFER(driver_data, buffer_id);
 	if (buffer_object == NULL)
 		return VA_STATUS_ERROR_INVALID_BUFFER;
@@ -131,6 +135,8 @@ VAStatus RequestMapBuffer(VADriverContextP context, VABufferID buffer_id,
 	struct request_data *driver_data = context->pDriverData;
 	struct object_buffer *buffer_object;
 
+	request_log("fenrig: %s\n", __func__);
+
 	buffer_object = BUFFER(driver_data, buffer_id);
 	if (buffer_object == NULL || buffer_object->data == NULL)
 		return VA_STATUS_ERROR_INVALID_BUFFER;
@@ -146,6 +152,8 @@ VAStatus RequestUnmapBuffer(VADriverContextP context, VABufferID buffer_id)
 	struct request_data *driver_data = context->pDriverData;
 	struct object_buffer *buffer_object;
 
+	request_log("fenrig: %s\n", __func__);
+
 	buffer_object = BUFFER(driver_data, buffer_id);
 	if (buffer_object == NULL || buffer_object->data == NULL)
 		return VA_STATUS_ERROR_INVALID_BUFFER;
@@ -160,6 +168,8 @@ VAStatus RequestBufferSetNumElements(VADriverContextP context,
 {
 	struct request_data *driver_data = context->pDriverData;
 	struct object_buffer *buffer_object;
+
+	request_log("fenrig: %s\n", __func__);
 
 	buffer_object = BUFFER(driver_data, buffer_id);
 	if (buffer_object == NULL)
@@ -179,6 +189,8 @@ VAStatus RequestBufferInfo(VADriverContextP context, VABufferID buffer_id,
 {
 	struct request_data *driver_data = context->pDriverData;
 	struct object_buffer *buffer_object;
+
+	request_log("fenrig: %s\n", __func__);
 
 	buffer_object = BUFFER(driver_data, buffer_id);
 	if (buffer_object == NULL)
@@ -202,6 +214,8 @@ VAStatus RequestAcquireBufferHandle(VADriverContextP context,
 	unsigned int capture_type;
 	int export_fd;
 	int rc;
+
+	request_log("fenrig: %s\n", __func__);
 
 	video_format = driver_data->video_format;
 	if (video_format == NULL)
@@ -248,6 +262,8 @@ VAStatus RequestReleaseBufferHandle(VADriverContextP context,
 	struct request_data *driver_data = context->pDriverData;
 	struct object_buffer *buffer_object;
 	int export_fd;
+
+	request_log("fenrig: %s\n", __func__);
 
 	buffer_object = BUFFER(driver_data, buffer_id);
 	if (buffer_object == NULL)
