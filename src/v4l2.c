@@ -355,13 +355,15 @@ int v4l2_queue_buffer(int video_fd, int request_fd, unsigned int type,
 	buffer.memory = V4L2_MEMORY_MMAP;
 	buffer.index = index;
 	buffer.length = buffers_count;
-	buffer.m.planes = planes;
 
-	for (i = 0; i < buffers_count; i++)
-		if (v4l2_type_is_mplane(type))
-			buffer.m.planes[i].bytesused = size;
-		else
-			buffer.bytesused = size;
+	if (v4l2_type_is_mplane(type)) {
+		for (i = 0; i < buffers_count; i++) {
+			planes[i].bytesused = size;
+		}
+		buffer.m.planes = planes;
+	} else {
+		buffer.bytesused = size;
+	}
 
 	if (request_fd >= 0) {
 		buffer.flags = V4L2_BUF_FLAG_REQUEST_FD;

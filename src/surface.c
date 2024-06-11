@@ -137,12 +137,14 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 
 	destination_planes_count = video_format->planes_count;
 
+	request_log("fenrig: create %u buffers\n", surfaces_count);
 	rc = v4l2_create_buffers(driver_data->video_fd, capture_type,
 				&surfaces_count, &index_base);
 	if (rc < 0) {
 		request_log("v4l2_create_buffers failed: (%d) %s\n", errno, strerror(errno));
 		return VA_STATUS_ERROR_ALLOCATION_FAILED;
 	}
+	request_log("fernig: created %u buffers, with index_base %u\n", surfaces_count, index_base);
 
 	for (i = 0; i < surfaces_count; i++) {
 		index = index_base + i;
@@ -225,6 +227,7 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 		surface_object->source_data = NULL;
 		surface_object->source_size = 0;
 
+		request_log("fenrig: setting destination_index %u\n", index);
 		surface_object->destination_index = index;
 
 		surface_object->destination_planes_count =
