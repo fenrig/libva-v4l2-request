@@ -320,6 +320,7 @@ VAStatus RequestSyncSurface(VADriverContextP context, VASurfaceID surface_id)
 	}
 
 	if (surface_object->status != VASurfaceRendering) {
+		request_log("fenrig: status is not VASurfaceRendering\n");
 		status = VA_STATUS_SUCCESS;
 		goto complete;
 	}
