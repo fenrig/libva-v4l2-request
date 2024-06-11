@@ -138,6 +138,7 @@ VAStatus RequestCreateContext(VADriverContextP context, VAConfigID config_id,
 			goto error;
 		}
 
+		request_log("fenrig: setting source_index %u\n", index);
 		surface_object->source_index = index;
 		surface_object->source_data = source_data;
 		surface_object->source_size = length;
