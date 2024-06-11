@@ -156,6 +156,7 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 			return VA_STATUS_ERROR_ALLOCATION_FAILED;
 		}
 
+		request_log("v4l2_query_buffer in surface with index %u\n", index);
 		rc = v4l2_query_buffer(driver_data->video_fd, capture_type,
 				       index,
 				       surface_object->destination_map_lengths,

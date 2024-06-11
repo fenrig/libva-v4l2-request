@@ -91,12 +91,14 @@ VAStatus RequestCreateContext(VADriverContextP context, VAConfigID config_id,
 	}
 	memset(&context_object->dpb, 0, sizeof(context_object->dpb));
 
+	request_log("fenrig: Creating %u buffers\n", surfaces_count);
 	rc = v4l2_create_buffers(driver_data->video_fd, output_type,
 				&surfaces_count, &index_base);
 	if (rc < 0) {
 		status = VA_STATUS_ERROR_ALLOCATION_FAILED;
 		goto error;
 	}
+	request_log("fenrig: created %u buffers, with index base\n", surfaces_count, index_base);
 
 	/*
 	 * The surface_ids array has been allocated by the caller and
@@ -120,7 +122,7 @@ VAStatus RequestCreateContext(VADriverContextP context, VAConfigID config_id,
 			goto error;
 		}
 
-		request_log("v4l2_query_buffer in context with index %u\n", index);
+		request_log("fenrig: v4l2_query_buffer in context with index %u\n", index);
 		rc = v4l2_query_buffer(driver_data->video_fd, output_type,
 				       index, &length, &offset, 1);
 		if (rc < 0) {
