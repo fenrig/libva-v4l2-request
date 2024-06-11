@@ -529,8 +529,10 @@ VAStatus RequestExportSurfaceHandle(VADriverContextP context,
 	if (video_format == NULL)
 		return VA_STATUS_ERROR_OPERATION_FAILED;
 
-	if (mem_type != VA_SURFACE_ATTRIB_MEM_TYPE_DRM_PRIME_2)
+	if (mem_type != VA_SURFACE_ATTRIB_MEM_TYPE_DRM_PRIME_2) {
+		request_log("fenrig: mem_type != VA_SURFACE_ATTRIB_MEM_TYPE_DRM_PRIME_2\n");
 		return VA_STATUS_ERROR_UNSUPPORTED_MEMORY_TYPE;
+	}
 
 	surface_object = SURFACE(driver_data, surface_id);
 	if (surface_object == NULL)
@@ -586,6 +588,7 @@ VAStatus RequestExportSurfaceHandle(VADriverContextP context,
 	}
 
 	status = VA_STATUS_SUCCESS;
+	request_log("fenrig: %s complete\n", __func__);
 	goto complete;
 
 error:
