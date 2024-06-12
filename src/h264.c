@@ -312,7 +312,8 @@ static void h264_va_picture_to_v4l2(struct request_data *driver_data,
 static void h264_va_matrix_to_v4l2(struct request_data *driver_data,
 				   struct object_context *context,
 				   VAIQMatrixBufferH264 *VAMatrix,
-				   struct v4l2_ctrl_h264_scaling_matrix *v4l2_matrix)
+				   struct v4l2_ctrl_h264_scaling_matrix *v4l2_matrix,
+				   struct v4l2_ctrl_h264_sps *sps)
 {
 	memcpy(v4l2_matrix->scaling_list_4x4, &VAMatrix->ScalingList4x4,
 	       sizeof(VAMatrix->ScalingList4x4));
@@ -324,10 +325,18 @@ static void h264_va_matrix_to_v4l2(struct request_data *driver_data,
 	 */
 	memcpy(v4l2_matrix->scaling_list_8x8[0], &VAMatrix->ScalingList8x8[0],
 	       sizeof(v4l2_matrix->scaling_list_8x8[0]));
-	memcpy(v4l2_matrix->scaling_list_8x8[1], &VAMatrix->ScalingList8x8[1],
-	       sizeof(v4l2_matrix->scaling_list_8x8[1]));
-	memcpy(v4l2_matrix->scaling_list_8x8[3], &VAMatrix->ScalingList8x8[1],
+	memcpy(v4l2_matrix->scaling_list_8x8[1], &VAMatrix->ScalingList8x8[3],
 	       sizeof(v4l2_matrix->scaling_list_8x8[3]));
+	if (sps->chroma_format_idc == 3) {
+		memcpy(v4l2_matrix->scaling_list_8x8[2], &VAMatrix->ScalingList8x8[1],
+	       sizeof(v4l2_matrix->scaling_list_8x8[2]));
+		memcpy(v4l2_matrix->scaling_list_8x8[3], &VAMatrix->ScalingList8x8[4],
+	       sizeof(v4l2_matrix->scaling_list_8x8[3]));
+		memcpy(v4l2_matrix->scaling_list_8x8[4], &VAMatrix->ScalingList8x8[2],
+	       sizeof(v4l2_matrix->scaling_list_8x8[4]));
+		memcpy(v4l2_matrix->scaling_list_8x8[5], &VAMatrix->ScalingList8x8[5],
+	       sizeof(v4l2_matrix->scaling_list_8x8[5]));
+    }
 }
 
 static void h264_copy_pred_table(struct v4l2_h264_weight_factors *factors,
@@ -539,7 +548,7 @@ int h264_set_controls(struct request_data *driver_data,
 				&surface->params.h264.picture,
 				&decode, &pps, &sps);
 	h264_va_matrix_to_v4l2(driver_data, context,
-			       &surface->params.h264.matrix, &matrix);
+			       &surface->params.h264.matrix, &matrix, &sps);
 	h264_va_slice_to_v4l2(driver_data, context,
 					&surface->params.h264.slice,
 					&surface->params.h264.picture, &slice, &weights);

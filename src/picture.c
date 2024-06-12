@@ -343,7 +343,7 @@ VAStatus RequestEndPicture(VADriverContextP context, VAContextID context_id)
 		return rc;
 
 	rc = v4l2_queue_buffer(driver_data->video_fd, request_fd, output_type,
-			       ((int) surface_object->slices_count) + 1,
+			       ((int) surface_object->slices_count) - 1,
 			       surface_object->source_index,
 			       surface_object->slices_size, 1);
 	if (rc < 0)
@@ -351,7 +351,7 @@ VAStatus RequestEndPicture(VADriverContextP context, VAContextID context_id)
 
 	surface_object->timestamp.tv_usec = ((int) surface_object->destination_index) + 1;
 	rc = v4l2_queue_buffer(driver_data->video_fd, -1, capture_type, 
-				   ((int) surface_object->slices_count) + 1,
+				   ((int) surface_object->slices_count) - 1,
 			       surface_object->destination_index, 0,
 			       surface_object->destination_buffers_count);
 	if (rc < 0)
