@@ -542,7 +542,7 @@ int h264_set_controls(struct request_data *driver_data,
 	if(output == NULL) {
 		output = dpb_find_entry(context);
 		if(output == NULL) {
-			request_log("fenrig: FIXME: %s(): output == NULL", __func__);
+			request_log("fenrig: FIXME: %s(): output == NULL\n", __func__);
 			return VA_STATUS_ERROR_OPERATION_FAILED;
 		}
 	}
