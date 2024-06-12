@@ -147,40 +147,6 @@ VAStatus RequestDestroyImage(VADriverContextP context, VAImageID image_id)
 	return VA_STATUS_SUCCESS;
 }
 
-static VAStatus copy_surface_to_image (struct request_data *driver_data,
-				       struct object_surface *surface_object,
-				       VAImage *image)
-{
-	struct object_buffer *buffer_object;
-	unsigned int i;
-
-	request_log("fenrig: %s\n", __func__);
-
-	buffer_object = BUFFER(driver_data, image->buf);
-	if (buffer_object == NULL)
-		return VA_STATUS_ERROR_INVALID_BUFFER;
-
-	for (i = 0; i < surface_object->destination_planes_count; i++) {
-#ifdef __arm__
-		if (!video_format_is_linear(driver_data->video_format))
-			tiled_to_planar(surface_object->destination_data[i],
-					buffer_object->data + image->offsets[i],
-					image->pitches[i], image->width,
-					i == 0 ? image->height :
-						 image->height / 2);
-		else {
-#endif
-			memcpy(buffer_object->data + image->offsets[i],
-			       surface_object->destination_data[i],
-			       surface_object->destination_sizes[i]);
-#ifdef __arm__
-		}
-#endif
-	}
-
-	return VA_STATUS_SUCCESS;
-}
-
 VAStatus RequestDeriveImage(VADriverContextP context, VASurfaceID surface_id,
 			    VAImage *image)
 {
@@ -206,10 +172,6 @@ VAStatus RequestDeriveImage(VADriverContextP context, VASurfaceID surface_id,
 
 	status = RequestCreateImage(context, &format, surface_object->width,
 				    surface_object->height, image);
-	if (status != VA_STATUS_SUCCESS)
-		return status;
-
-	status = copy_surface_to_image (driver_data, surface_object, image);
 	if (status != VA_STATUS_SUCCESS)
 		return status;
 
@@ -246,6 +208,9 @@ VAStatus RequestGetImage(VADriverContextP context, VASurfaceID surface_id,
 	struct object_surface *surface_object;
 	struct object_image *image_object;
 	VAImage *image;
+	unsigned int i;
+	void *data;
+	VAStatus status;
 
 	request_log("fenrig: %s\n", __func__);
 	
@@ -259,10 +224,29 @@ VAStatus RequestGetImage(VADriverContextP context, VASurfaceID surface_id,
 		return VA_STATUS_ERROR_INVALID_IMAGE;
 
 	image = &image_object->image;
+	/* we don't support cropping */
 	if (x != 0 || y != 0 || width != image->width || height != image->height)
 		return VA_STATUS_ERROR_UNIMPLEMENTED;
 
-	return copy_surface_to_image (driver_data, surface_object, image);
+	status = RequestMapBuffer(context, image->buf, &data);
+	if (status != VA_STATUS_SUCCESS)
+		return status;
+
+	for (i = 0; i < surface_object->destination_planes_count; i++) {
+		if (!video_format_is_linear(driver_data->video_format))
+			tiled_to_planar(surface_object->destination_data[i],
+					data + image->offsets[i],
+					image->pitches[i], image->width,
+					i == 0 ? image->height :
+						 image->height / 2);
+		else {
+			memcpy(data + image->offsets[i],
+			       surface_object->destination_data[i],
+			       surface_object->destination_sizes[i]);
+		}
+	}
+
+	return VA_STATUS_SUCCESS;
 }
 
 VAStatus RequestPutImage(VADriverContextP context, VASurfaceID surface_id,

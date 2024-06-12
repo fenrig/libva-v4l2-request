@@ -77,23 +77,26 @@ VAStatus RequestCreateBuffer(VADriverContextP context, VAContextID context_id,
 		goto error;
 	}
 
-	buffer_data = malloc(size * count);
-	if (buffer_data == NULL) {
-		status = VA_STATUS_ERROR_ALLOCATION_FAILED;
-		goto error;
-	}
-
-	if (data != NULL)
-		memcpy(buffer_data, data, size * count);
-
 	buffer_object->type = type;
 	buffer_object->initial_count = count;
 	buffer_object->count = count;
-	buffer_object->data = buffer_data;
+	buffer_object->data = NULL;
 	buffer_object->size = size;
 
 	buffer_object->derived_surface_id = VA_INVALID_ID;
 	buffer_object->info.handle = (uintptr_t) -1;
+
+	if(data != NULL) {
+		void *buffer_data;
+
+		status = RequestMapBuffer(context, id, &buffer_data);
+		if(status != VA_STATUS_SUCCESS) {
+			goto error;
+		}
+
+		mempcy(buffer_data, data, size * count);
+		RequestUnmapBuffer(context, id);
+	}
 
 	*buffer_id = id;
 
@@ -120,8 +123,7 @@ VAStatus RequestDestroyBuffer(VADriverContextP context, VABufferID buffer_id)
 	if (buffer_object == NULL)
 		return VA_STATUS_ERROR_INVALID_BUFFER;
 
-	if (buffer_object->data != NULL)
-		free(buffer_object->data);
+	free(buffer_object->data);
 
 	object_heap_free(&driver_data->buffer_heap,
 			 (struct object_base *)buffer_object);
@@ -138,8 +140,19 @@ VAStatus RequestMapBuffer(VADriverContextP context, VABufferID buffer_id,
 	request_log("fenrig: %s\n", __func__);
 
 	buffer_object = BUFFER(driver_data, buffer_id);
-	if (buffer_object == NULL || buffer_object->data == NULL)
+	if (buffer_object == NULL)
 		return VA_STATUS_ERROR_INVALID_BUFFER;
+
+	/* we do lazy allocation, avoiding malloc on vaSurfaceDerive */
+	if (buffer_object->data == NULL) {
+		unsigned int size = buffer_object->size;
+		unsigned int count = buffer_object->count;
+
+		buffer_object->data = malloc(size * count);
+		if (buffer_object->data == NULL) {
+			return VA_STATUS_ERROR_ALLOCATION_FAILED;
+		}
+	}
 
 	/* Our buffers are always mapped. */
 	*data_map = buffer_object->data;
