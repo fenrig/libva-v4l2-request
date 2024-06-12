@@ -289,11 +289,13 @@ int v4l2_query_buffer(int video_fd, unsigned int type, unsigned int index,
 		.type = type,
 		.memory = V4L2_MEMORY_MMAP,
 		.index = index,
-		.length = buffers_count,
-		.m.planes = planes,
 	};
 
-	memset(planes, 0, (buffers_count * sizeof(struct v4l2_plane)));
+	if(v4l2_type_is_mplane(type)) {
+		buffer.length = buffers_count;
+		.m.planes = planes;
+		memset(planes, 0, (buffers_count * sizeof(struct v4l2_plane)));
+	}
 
 	rc = ioctl(video_fd, VIDIOC_QUERYBUF, &buffer);
 	if (rc < 0) {
