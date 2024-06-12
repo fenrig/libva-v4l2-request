@@ -537,8 +537,15 @@ int h264_set_controls(struct request_data *driver_data,
 
 	output = dpb_lookup(context, &surface->params.h264.picture.CurrPic,
 			    NULL, NULL);
-	if (!output)
+	
+
+	if(output == NULL) {
 		output = dpb_find_entry(context);
+		if(output == NULL) {
+			request_log("fenrig: FIXME: %s(): output == NULL", __func__);
+			return VA_STATUS_ERROR_OPERATION_FAILED;
+		}
+	}
 
 	dpb_clear_entry(output, true);
 
