@@ -94,7 +94,7 @@ VAStatus RequestCreateBuffer(VADriverContextP context, VAContextID context_id,
 			goto error;
 		}
 
-		mempcy(buffer_data, data, size * count);
+		memcpy(buffer_data, data, size * count);
 		RequestUnmapBuffer(context, id);
 	}
 
