@@ -180,6 +180,10 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 				request_log("mmap failed");
 				return VA_STATUS_ERROR_ALLOCATION_FAILED;
 			}
+
+			rc = v4l2_export_buffer(driver_data->video_fd, capture_type, index, O_RDONLY, &(surface_object->export_fd), 1);
+			if (rc < 0)
+				return VA_STATUS_ERROR_ALLOCATION_FAILED;
 		}
 
 		/*

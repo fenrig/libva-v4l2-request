@@ -225,7 +225,6 @@ VAStatus RequestAcquireBufferHandle(VADriverContextP context,
 	struct object_surface *surface_object;
 	struct video_format *video_format;
 	unsigned int capture_type;
-	int export_fd;
 	int rc;
 
 	request_log("fenrig: %s\n", __func__);
@@ -254,13 +253,7 @@ VAStatus RequestAcquireBufferHandle(VADriverContextP context,
 	if (surface_object->destination_buffers_count > 1)
 		return VA_STATUS_ERROR_OPERATION_FAILED;
 
-	rc = v4l2_export_buffer(driver_data->video_fd, capture_type,
-				surface_object->destination_index, O_RDONLY,
-				&export_fd, 1);
-	if (rc < 0)
-		return VA_STATUS_ERROR_OPERATION_FAILED;
-
-	buffer_info->handle = (uintptr_t) export_fd;
+	buffer_info->handle = (uintptr_t) surface_object->export_fd;
 	buffer_info->type = buffer_object->type;
 	buffer_info->mem_size = buffer_object->size * buffer_object->count;
 

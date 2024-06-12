@@ -62,6 +62,8 @@ struct object_surface {
 	unsigned int slices_size;
 	unsigned int slices_count;
 
+	int export_fd;
+
 	struct timeval timestamp;
 
 	union {
