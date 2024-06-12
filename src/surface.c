@@ -145,7 +145,7 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
 		request_log("v4l2_create_buffers failed: (%d) %s\n", errno, strerror(errno));
 		return VA_STATUS_ERROR_ALLOCATION_FAILED;
 	}
-	request_log("fernig: created %u buffers, with index_base %u\n", surfaces_count, index_base);
+	request_log("fenrig: created %u buffers, with index_base %u\n", surfaces_count, index_base);
 
 	for (i = 0; i < surfaces_count; i++) {
 		index = index_base + i;

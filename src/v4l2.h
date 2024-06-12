@@ -49,7 +49,7 @@ int v4l2_query_buffer(int video_fd, unsigned int type, unsigned int index,
 int v4l2_request_buffers(int video_fd, unsigned int type,
 			 unsigned int buffers_count);
 int v4l2_queue_buffer(int video_fd, int request_fd, unsigned int type,
-		      struct timeval *timestamp, unsigned int index,
+		      int timestamp_used, unsigned int index,
 		      unsigned int size, unsigned int buffers_count);
 int v4l2_dequeue_buffer(int video_fd, int request_fd, unsigned int type,
 			unsigned int index, unsigned int buffers_count);

@@ -342,7 +342,7 @@ int v4l2_request_buffers(int video_fd, unsigned int type,
 }
 
 int v4l2_queue_buffer(int video_fd, int request_fd, unsigned int type,
-		      struct timeval *timestamp, unsigned int index,
+		      int timestamp_usec, unsigned int index,
 		      unsigned int size, unsigned int buffers_count)
 {
 	struct v4l2_plane planes[buffers_count];
@@ -355,7 +355,7 @@ int v4l2_queue_buffer(int video_fd, int request_fd, unsigned int type,
 	buffer.type = type;
 	buffer.memory = V4L2_MEMORY_MMAP;
 	buffer.index = index;
-	
+	buffer.timestamp.tv_usec = timestamp_usec;
 
 	if (v4l2_type_is_mplane(type)) {
 		memset(planes, 0, sizeof(struct v4l2_plane) * buffers_count);
@@ -373,8 +373,6 @@ int v4l2_queue_buffer(int video_fd, int request_fd, unsigned int type,
 		buffer.request_fd = request_fd;
 	}
 
-	if (timestamp != NULL)
-		buffer.timestamp = *timestamp;
 
 
 	rc = ioctl(video_fd, VIDIOC_QBUF, &buffer);
