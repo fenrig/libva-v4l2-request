@@ -372,8 +372,11 @@ int v4l2_queue_buffer(int video_fd, int request_fd, unsigned int type,
 		buffer.request_fd = request_fd;
 	}
 
+/*
 	if (timestamp != NULL)
 		buffer.timestamp = *timestamp;
+*/
+	buffer.timestamp = index + 1;
 
 	rc = ioctl(video_fd, VIDIOC_QBUF, &buffer);
 	if (rc < 0) {
