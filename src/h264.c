@@ -257,10 +257,6 @@ static void h264_va_picture_to_v4l2(struct request_data *driver_data,
 	pps->chroma_qp_index_offset = VAPicture->chroma_qp_index_offset;
 	pps->second_chroma_qp_index_offset =
 		VAPicture->second_chroma_qp_index_offset;
-	pps->num_ref_idx_l0_default_active_minus1 =
-		VAPicture->num_ref_idx_l0_default_active_minus1;
-	pps->num_ref_idx_l1_default_active_minus1 =
-		VAPicture->num_ref_idx_l1_default_active_minus1;
 
 	if (VAPicture->pic_fields.bits.entropy_coding_mode_flag)
 		pps->flags |= V4L2_H264_PPS_FLAG_ENTROPY_CODING_MODE;
@@ -544,12 +540,13 @@ int h264_set_controls(struct request_data *driver_data,
 				&decode, &pps, &sps);
 	h264_va_matrix_to_v4l2(driver_data, context,
 			       &surface->params.h264.matrix, &matrix);
+	h264_va_slice_to_v4l2(driver_data, context,
+					&surface->params.h264.slice,
+					&surface->params.h264.picture, &slice, &weights);
+
 	
 
 	if(context->decode_mode == V4L2_STATELESS_H264_DECODE_MODE_SLICE_BASED) {
-		h264_va_slice_to_v4l2(driver_data, context,
-					&surface->params.h264.slice,
-					&surface->params.h264.picture, &slice, &weights);
 		amount_of_controls = 6;
 	}
 
