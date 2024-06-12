@@ -490,7 +490,7 @@ VAStatus RequestPutSurface(VADriverContextP context, VASurfaceID surface_id,
 			   unsigned int cliprects_count, unsigned int flags)
 {
 	request_log("fenrig: %s\n", __func__);
-	return VA_STATUS_ERROR_UNIMPLEMENTED;
+	return VA_STATUS_SUCCESS;
 }
 
 VAStatus RequestLockSurface(VADriverContextP context, VASurfaceID surface_id,
