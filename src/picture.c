@@ -249,8 +249,8 @@ VAStatus RequestBeginPicture(VADriverContextP context, VAContextID context_id,
 	surface_object = SURFACE(driver_data, surface_id);
 	if (surface_object == NULL)
 		return VA_STATUS_ERROR_INVALID_SURFACE;
-	if(surface_object->source == NULL) {
-		request_log("fenrig: FIXME: %s() surface_id->source == NULL\n", __func__);
+	if(surface_object->source_data == NULL) {
+		request_log("fenrig: FIXME: %s() surface_id->source_data == NULL\n", __func__);
 		return VA_STATUS_ERROR_INVALID_SURFACE;
 	}
 
