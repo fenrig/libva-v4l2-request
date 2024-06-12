@@ -39,4 +39,6 @@ void request_log(const char *format, ...)
 	va_start(arguments, format);
 	vfprintf(stderr, format, arguments);
 	va_end(arguments);
+
+	
 }
