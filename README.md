@@ -21,10 +21,19 @@ such:
 
 	export LIBVA_DRIVER_NAME=v4l2_request
 
+At the moment there is no autodection of the video path yet (can be implemented), 
+and thus you should define the video path that refers to the respective decoder
+
+	export LIBVA_V4L2_REQUEST_VIDEO_PATH=/dev/video1
+
 A media player that supports VAAPI (such as VLC) can then be used to decode a
 video in a supported format:
 
 	vlc path/to/video.mpg
+
+or with mpv:
+
+	mpv -hwdec=vaapi path/to/video.mp4
 
 Sample media files can be obtained from:
 
@@ -73,3 +82,8 @@ An Image is a standard data structure containing rendered frames in a usable
 pixel format. Here we only use NV12 buffers which are converted from sunxi's
 proprietary tiled pixel format with tiled_yuv when deriving an Image from a
 Surface.
+
+### DEBUGGING the v4l2 kernel
+
+echo 0x1f > /sys/class/video4linux/video1/dev_debug
+echo Y > /sys/module/v4l2_mem2mem/parameters/debug
