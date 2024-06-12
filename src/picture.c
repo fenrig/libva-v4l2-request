@@ -66,6 +66,14 @@ static VAStatus codec_store_buffer(struct request_data *driver_data,
 		 * and have to copy from a regular buffer.
 		 */
 		request_log("fenrig: VASliceDataBufferType\n");
+		if(surface_object->source_data == NULL) {
+			request_log("fenrig: %s(): surface_object->source_data == NULL\n", __func__);
+			request_log("fenrig: %s(): surface_object->source_index == %u\n", surface_object->source_index);
+			request_log("fenrig: %s(): surface_object->source_size == %u\n", surface_object->source_size);
+			request_log("fenrig: %s(): surface_object->surface_object->slices_size == %u\n", surface_object->slices_size);
+			request_log("fenrig: %s(): surface_object->destination_index == %u\n", surface_object->destination_index);
+			return VA_STATUS_ERROR_ALLOCATION_FAILED; 
+		} 
 		if (context->h264_start_code) {
 			static const char start_code[3] = { 0x00, 0x00, 0x01 };
 
