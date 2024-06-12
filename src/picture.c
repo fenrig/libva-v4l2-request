@@ -326,7 +326,7 @@ VAStatus RequestEndPicture(VADriverContextP context, VAContextID context_id)
 	if (surface_object == NULL)
 		return VA_STATUS_ERROR_INVALID_SURFACE;
 
-	//gettimeofday(&surface_object->timestamp, NULL);
+	gettimeofday(&surface_object->timestamp, NULL);
 
 	request_fd = surface_object->request_fd;
 	if (request_fd < 0) {
@@ -345,7 +345,7 @@ VAStatus RequestEndPicture(VADriverContextP context, VAContextID context_id)
 	rc = v4l2_queue_buffer(driver_data->video_fd, request_fd, output_type,
 			       &surface_object->timestamp,
 			       surface_object->source_index,
-			       surface_object->slices_size, 1);
+			       0, 1);
 	if (rc < 0)
 		return VA_STATUS_ERROR_OPERATION_FAILED;
 

@@ -350,19 +350,20 @@ int v4l2_queue_buffer(int video_fd, int request_fd, unsigned int type,
 	unsigned int i;
 	int rc;
 
-	memset(planes, 0, sizeof(planes));
 	memset(&buffer, 0, sizeof(buffer));
 
 	buffer.type = type;
 	buffer.memory = V4L2_MEMORY_MMAP;
 	buffer.index = index;
-	buffer.length = buffers_count;
+	
 
 	if (v4l2_type_is_mplane(type)) {
+		memset(planes, 0, sizeof(planes));
 		for (i = 0; i < buffers_count; i++) {
 			planes[i].bytesused = size;
 		}
 		buffer.m.planes = planes;
+		buffer.length = buffers_count;
 	} else {
 		buffer.bytesused = size;
 	}
@@ -372,11 +373,9 @@ int v4l2_queue_buffer(int video_fd, int request_fd, unsigned int type,
 		buffer.request_fd = request_fd;
 	}
 
-/*
 	if (timestamp != NULL)
 		buffer.timestamp = *timestamp;
-*/
-	buffer.timestamp = index + 1;
+
 
 	rc = ioctl(video_fd, VIDIOC_QBUF, &buffer);
 	if (rc < 0) {
