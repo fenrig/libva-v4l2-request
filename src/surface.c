@@ -350,6 +350,13 @@ VAStatus RequestSyncSurface(VADriverContextP context, VASurfaceID surface_id)
 		goto error;
 	}
 
+	rc = v4l2_dequeue_buffer(driver_data->video_fd, -1, output_type,
+				 surface_object->source_index, 1);
+	if (rc < 0) {
+		status = VA_STATUS_ERROR_OPERATION_FAILED;
+		goto error;
+	}
+
 	rc = v4l2_dequeue_buffer(driver_data->video_fd, -1, capture_type,
 				 surface_object->destination_index,
 				 surface_object->destination_buffers_count);
@@ -358,12 +365,6 @@ VAStatus RequestSyncSurface(VADriverContextP context, VASurfaceID surface_id)
 		goto error;
 	}
 
-	rc = v4l2_dequeue_buffer(driver_data->video_fd, -1, output_type,
-				 surface_object->source_index, 1);
-	if (rc < 0) {
-		status = VA_STATUS_ERROR_OPERATION_FAILED;
-		goto error;
-	}
 
 	surface_object->status = VASurfaceDisplaying;
 
