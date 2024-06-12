@@ -68,10 +68,10 @@ static VAStatus codec_store_buffer(struct request_data *driver_data,
 		request_log("fenrig: VASliceDataBufferType\n");
 		if(surface_object->source_data == NULL) {
 			request_log("fenrig: %s(): surface_object->source_data == NULL\n", __func__);
-			request_log("fenrig: %s(): surface_object->source_index == %u\n", surface_object->source_index);
-			request_log("fenrig: %s(): surface_object->source_size == %u\n", surface_object->source_size);
-			request_log("fenrig: %s(): surface_object->surface_object->slices_size == %u\n", surface_object->slices_size);
-			request_log("fenrig: %s(): surface_object->destination_index == %u\n", surface_object->destination_index);
+			request_log("fenrig: %s(): surface_object->source_index == %u\n", __func__, surface_object->source_index);
+			request_log("fenrig: %s(): surface_object->source_size == %u\n", __func__, surface_object->source_size);
+			request_log("fenrig: %s(): surface_object->surface_object->slices_size == %u\n", __func__, surface_object->slices_size);
+			request_log("fenrig: %s(): surface_object->destination_index == %u\n", __func__, surface_object->destination_index);
 			return VA_STATUS_ERROR_ALLOCATION_FAILED; 
 		} 
 		if (context->h264_start_code) {
@@ -249,6 +249,10 @@ VAStatus RequestBeginPicture(VADriverContextP context, VAContextID context_id,
 	surface_object = SURFACE(driver_data, surface_id);
 	if (surface_object == NULL)
 		return VA_STATUS_ERROR_INVALID_SURFACE;
+	if(surface_id->source == NULL) {
+		request_log("fenrig: FIXME: %s() surface_id->source == NULL\n", __func__);
+		return VA_STATUS_ERROR_INVALID_SURFACE;
+	}
 
 	if (surface_object->status == VASurfaceRendering)
 		RequestSyncSurface(context, surface_id);
