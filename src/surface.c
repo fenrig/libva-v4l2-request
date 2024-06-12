@@ -97,9 +97,9 @@ VAStatus RequestCreateSurfaces2(VADriverContextP context, unsigned int format,
     if (!driver_data->video_format) {
 		found = v4l2_find_format(driver_data->video_fd,
 					 capture_type,
-					 V4L2_PIX_FMT_SUNXI_TILED_NV12);
+					 V4L2_PIX_FMT_NV12_32L32);
 		if (found)
-			video_format = video_format_find(V4L2_PIX_FMT_SUNXI_TILED_NV12);
+			video_format = video_format_find(V4L2_PIX_FMT_NV12_32L32);
 
 		found = v4l2_find_format(driver_data->video_fd,
 					 capture_type,

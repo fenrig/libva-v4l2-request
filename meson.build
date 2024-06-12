@@ -55,9 +55,9 @@ if not cc.has_header_symbol('linux/videodev2.h', 'V4L2_PIX_FMT_MPEG2_SLICE',
 			    include_directories : kernel_headers_inc)
     error('Missing macro V4L2_PIX_FMT_MPEG2_SLICE from Linux Kernel headers')
 endif
-if not cc.has_header_symbol('linux/videodev2.h', 'V4L2_PIX_FMT_SUNXI_TILED_NV12',
+if not cc.has_header_symbol('linux/videodev2.h', 'V4L2_PIX_FMT_NV12_32L32',
 			    include_directories : kernel_headers_inc)
-    error('Missing macro V4L2_PIX_FMT_SUNXI_TILED_NV12 from Linux Kernel headers')
+    error('Missing macro V4L2_PIX_FMT_NV12_32L32 from Linux Kernel headers')
 endif
 
 libva_dep = dependency('libva', version : '>= 1.1.0')

@@ -47,7 +47,7 @@ static struct video_format formats[] = {
 	},
 	{
 		.description		= "Sunxi tiled NV12 YUV",
-		.v4l2_format		= V4L2_PIX_FMT_SUNXI_TILED_NV12,
+		.v4l2_format		= V4L2_PIX_FMT_NV12_32L32,
 		.v4l2_buffers_count	= 1,
 		.v4l2_mplane		= false,
 		.drm_format		= DRM_FORMAT_NV12,
