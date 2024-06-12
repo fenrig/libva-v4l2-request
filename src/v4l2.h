@@ -28,7 +28,7 @@
 #include <stdbool.h>
 #include <linux/types.h>
 
-#define SOURCE_SIZE_MAX						(720 * 1280)
+#define SOURCE_SIZE_MAX						4194304
 
 unsigned int v4l2_type_video_output(bool mplane);
 unsigned int v4l2_type_video_capture(bool mplane);
