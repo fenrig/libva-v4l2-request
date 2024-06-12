@@ -345,7 +345,7 @@ VAStatus RequestEndPicture(VADriverContextP context, VAContextID context_id)
 	rc = v4l2_queue_buffer(driver_data->video_fd, request_fd, output_type,
 			       ((int) surface_object->slices_count) - 1,
 			       surface_object->source_index,
-			       surface_object->slices_size, 1);
+			       surface_object->destination_index + 1, 1);
 	if (rc < 0)
 		return VA_STATUS_ERROR_OPERATION_FAILED;
 
