@@ -350,6 +350,7 @@ VAStatus RequestEndPicture(VADriverContextP context, VAContextID context_id)
 	if (rc < 0)
 		return VA_STATUS_ERROR_OPERATION_FAILED;
 
+	surface_object->timestamp.tv_usec = ((int) surface_object->destination_index) + 1;
 	rc = v4l2_queue_buffer(driver_data->video_fd, -1, capture_type, 
 				   &surface_object->timestamp,
 			       surface_object->destination_index, 0,
