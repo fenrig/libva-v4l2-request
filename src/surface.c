@@ -549,6 +549,8 @@ VAStatus RequestExportSurfaceHandle(VADriverContextP context,
 
 	capture_type = driver_data->format.type;
 
+	export_fds[0] = surface_object->export_fd;
+/*
 	rc = v4l2_export_buffer(driver_data->video_fd, capture_type,
 				surface_object->destination_index, O_RDONLY,
 				export_fds, export_fds_count);
@@ -556,6 +558,7 @@ VAStatus RequestExportSurfaceHandle(VADriverContextP context,
 		status = VA_STATUS_ERROR_OPERATION_FAILED;
 		goto error;
 	}
+*/
 
 	planes_count = surface_object->destination_planes_count;
 
