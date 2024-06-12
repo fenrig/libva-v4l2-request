@@ -71,8 +71,8 @@ static VAStatus codec_store_buffer(struct request_data *driver_data,
 
 			memcpy(surface_object->source_data +
 			       surface_object->slices_size,
-			       start_code, sizeof(start_code));
-			surface_object->slices_size += sizeof(start_code);
+			       start_code, 3);
+			surface_object->slices_size += 3;
 		}
 		memcpy(surface_object->source_data +
 			       surface_object->slices_size,
@@ -343,15 +343,15 @@ VAStatus RequestEndPicture(VADriverContextP context, VAContextID context_id)
 		return rc;
 
 	rc = v4l2_queue_buffer(driver_data->video_fd, request_fd, output_type,
-			       ((int) surface_object->destination_index) + 1,
+			       ((int) surface_object->slices_count) + 1,
 			       surface_object->source_index,
-			       0, 1);
+			       surface_object->slices_size, 1);
 	if (rc < 0)
 		return VA_STATUS_ERROR_OPERATION_FAILED;
 
 	surface_object->timestamp.tv_usec = ((int) surface_object->destination_index) + 1;
 	rc = v4l2_queue_buffer(driver_data->video_fd, -1, capture_type, 
-				   ((int) surface_object->destination_index) + 1,
+				   ((int) surface_object->slices_count) + 1,
 			       surface_object->destination_index, 0,
 			       surface_object->destination_buffers_count);
 	if (rc < 0)
