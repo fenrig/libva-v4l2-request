@@ -326,7 +326,8 @@ VAStatus RequestEndPicture(VADriverContextP context, VAContextID context_id)
 	if (surface_object == NULL)
 		return VA_STATUS_ERROR_INVALID_SURFACE;
 
-	gettimeofday(&surface_object->timestamp, NULL);
+	//gettimeofday(&surface_object->timestamp, NULL);
+	surface_object->timestamp.tv_usec = ((int) surface_object->destination_index) + 1;
 
 	request_fd = surface_object->request_fd;
 	if (request_fd < 0) {

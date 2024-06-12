@@ -358,7 +358,7 @@ int v4l2_queue_buffer(int video_fd, int request_fd, unsigned int type,
 	
 
 	if (v4l2_type_is_mplane(type)) {
-		memset(planes, 0, sizeof(planes));
+		memset(planes, 0, sizeof(struct v4l2_plane) * buffers_count);
 		for (i = 0; i < buffers_count; i++) {
 			planes[i].bytesused = size;
 		}
