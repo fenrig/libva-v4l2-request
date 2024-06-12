@@ -72,8 +72,12 @@ struct video_format *video_format_find(unsigned int pixelformat)
 
 bool video_format_is_linear(struct video_format *format)
 {
-	if (format == NULL)
+	if (format == NULL) {
+		request_log("fenrig: %s(): format == NULL", __func__);
 		return true;
+	}
 
-	return format->drm_modifier == DRM_FORMAT_MOD_NONE;
+	bool ret = format->drm_modifier == DRM_FORMAT_MOD_NONE;
+	request_log("fenrig: %s(): format = '%s' -> returning %s", format->description, (ret ? "True" : "False"));
+	return ret;
 }
