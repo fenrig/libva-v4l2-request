@@ -77,7 +77,7 @@ bool video_format_is_linear(struct video_format *format)
 		return true;
 	}
 
-	bool ret = format->drm_modifier == DRM_FORMAT_MOD_NONE;
+	bool ret = (format->drm_modifier == DRM_FORMAT_MOD_NONE);
 	request_log("fenrig: %s(): format = '%s' -> returning %s", format->description, (ret ? "True" : "False"));
 	return ret;
 }
